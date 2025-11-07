@@ -2,14 +2,10 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const categorySchema = new Schema({
-    // CATEGORY_ID: {
-    //     type: String,
-    //     required: [true]
-    // },
+const category_schema = new Schema({
     TENDM: {
         type: String,
-        required: [true]
+        required: true
     },
     PRODUCT: {
         type: Schema.Types.ObjectId,
@@ -17,5 +13,5 @@ const categorySchema = new Schema({
     }
 })
 
-const category = model('category', categorySchema)
+const category = model('category', category_schema)
 export default category

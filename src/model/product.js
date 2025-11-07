@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const productSchema = new Schema({
-    // PRODUCT_ID: {
-    //     type: String,
-    //     required: true
-    // },
+const product_schema = new Schema({
     TENSACH: {
         type: String,
         required: true
@@ -22,7 +18,7 @@ const productSchema = new Schema({
     },
     MOTA: {
         type: String,
-        required: [true, "Vui lòng nhập mô tả sách"],
+        // required: [true, "Vui lòng nhập mô tả sách"],
         trim: true
     },
     IMG_URL: {
@@ -51,7 +47,7 @@ const productSchema = new Schema({
     },
     VIEWCOUNT: {
         type: Number,
-        required: [true]
+        required: true
     },
     CATEGORY: {
         type: Schema.Types.ObjectId,
@@ -59,5 +55,5 @@ const productSchema = new Schema({
     }
 })
 
-const product = model('product', productSchema)
+const product = model('product', product_schema)
 export default product

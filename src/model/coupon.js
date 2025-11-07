@@ -22,7 +22,7 @@ const coupon_schema = new Schema({
     },
     USAGE_LIMIT: {
         type: Number,
-        required: true
+        default: 0
     }
 })
 

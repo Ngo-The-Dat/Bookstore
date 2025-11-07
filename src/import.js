@@ -13,4 +13,17 @@ import cart from './model/cart.js';
 import cart_details from './model/cart_details.js';
 import review from './model/review.js';
 
-export { mongoose, dotenv, express, user, address, product, category, coupon, order, order_details, cart, cart_details, review }
+export {
+    mongoose,
+    dotenv,
+    express,
+    user,
+    address,
+    product,
+    category,
+    coupon, order,
+    order_details,
+    cart,
+    cart_details,
+    review
+}

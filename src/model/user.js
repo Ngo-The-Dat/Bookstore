@@ -2,7 +2,7 @@
 import mongoose from "mongoose"
 const { Schema, model } = mongoose
 
-const userSchema = new Schema({
+const user_schema = new Schema({
     // USER_ID: {
     //     type: String,
     //     unique: [true, "Mã user là độc quyền"],
@@ -57,7 +57,7 @@ const userSchema = new Schema({
     }
 })
 
-const user = model('user', userSchema);
+const user = model('user', user_schema);
 export default user
 
 

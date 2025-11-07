@@ -13,7 +13,7 @@ const cart_details_schema = new Schema({
     },
     QUANTITY: {
         type: Number,
-        required: true
+        default: 0
     }
 })
 
