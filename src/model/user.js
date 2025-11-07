@@ -44,8 +44,9 @@ const user_schema = new Schema({
     },
     ROLE: {
         type: String,
-        required: true,
-        enum: ['customer', 'admin']
+        // required: true,
+        enum: ['customer', 'admin'],
+        default: 'customer'
     },
     IS_ACTIVE: {
         type: Boolean,
