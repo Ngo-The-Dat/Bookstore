@@ -16,3 +16,4 @@ VD: muốn chạy file ```app.js``` thì sửa lại thành
 "scripts": {
     "dev": "nodemon app.js"
   }
+
