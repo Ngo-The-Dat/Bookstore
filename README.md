@@ -1,5 +1,13 @@
-### Chạy server (dev)
+### Cài đặt Node.js
+- Tải Node.js tại: https://nodejs.org/en/download/
+
+### Cài node_modules:
 ```bash
+npm install
+```
+
+### Cách compile:
+```bash 
 npm run dev
 ```
 Tự động reload khi lưu file.
@@ -31,10 +39,6 @@ URL_MONGODB=mongodb://localhost:27017/bookstore
 ### Dọn dẹp thủ công CSDL
 Nếu muốn xóa tay toàn bộ collection mà không seed lại:
 ```bash
-node -e "import('./src/config/db.js').then(m=>m.connectDB().then(()=>m.delete_all_collection().then(()=>process.exit())))"
-```
-
-### Ghi chú
-Seeder dùng upsert để idempotent – chạy nhiều lần không tạo bản ghi trùng khóa (dựa trên EMAIL, CODE, TENSACH...).
-Muốn thêm dữ liệu khác, sửa file `src/seed/seed.js`.
-
+"scripts": {
+    "dev": "nodemon app.js"
+  }
