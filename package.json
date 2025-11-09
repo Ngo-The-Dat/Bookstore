@@ -4,13 +4,16 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "dev": "nodemon src/main.js"
+    "dev": "nodemon src/main.js",
+    "seed": "node src/seed/seed.js",
+    "seed:refresh": "node src/seed/seed.js --refresh"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",

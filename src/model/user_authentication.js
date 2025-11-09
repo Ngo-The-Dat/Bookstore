@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import user from "./user.js";
 
 const { Schema, model } = mongoose;
 
 const user_authentication_schema = new Schema({
     USER: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'user'
     },
     PROVIDER_NAME: {
         type: String,

@@ -11,12 +11,15 @@ const review_schema = new Schema({
         ref: 'product'
     },
     RATING: {
-        type: Number
+        type: Number,
+        min: 1,
+        max: 5
     },
     COMMENT: {
         type: String
     }
-})
+}, { timestamps: true }
+)
 
 const review = model('review', review_schema)
 export default review

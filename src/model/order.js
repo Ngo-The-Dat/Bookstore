@@ -1,5 +1,5 @@
 import mongoose, { mongo } from "mongoose";
-
+import product from "./product.js";
 const { Schema, model } = mongoose
 
 const order_schema = new Schema({
@@ -61,11 +61,38 @@ const order_schema = new Schema({
         ],
         default: "CASH"
     },
-    CREATED_AT: {
-        type: Date,
-        default: () => Date.now()
-    }
-})
+    PAYMENT_STATUS: {
+        type: String,
+        enum: [
+            "PENDING",
+            "PAID",
+            "REFUNDED",
+            "FAILED"
+        ],
+        default: "PENDING"
+    },
+    ITEM: [{
+        PRODUCT: {
+            type: Schema.Types.ObjectId,
+            ref: 'product'
+        },
+        NAME: {
+            type: "String"
+        },
+        PRICE_AT_PURCHASE: {
+            type: Number,
+            required: true
+        },
+        QUANTITY: {
+            type: Number,
+            required: true
+        },
+        TOTAL: {
+            type: Number,
+        }
+    }]
+}, { timestamps: true }
+)
 
 const order = model('order', order_schema)
 export default order

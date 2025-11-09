@@ -22,6 +22,10 @@ const coupon_schema = new Schema({
     },
     USAGE_LIMIT: {
         type: Number,
+        default: 50
+    },
+    USAGE_COUNT: {
+        type: Number,
         default: 0
     }
 })

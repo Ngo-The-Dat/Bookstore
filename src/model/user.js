@@ -3,11 +3,6 @@ import mongoose from "mongoose"
 const { Schema, model } = mongoose
 
 const user_schema = new Schema({
-    // USER_ID: {
-    //     type: String,
-    //     unique: [true, "Mã user là độc quyền"],
-    //     required: true
-    // },
     HOTEN: {
         type: String,
         required: true
@@ -52,11 +47,12 @@ const user_schema = new Schema({
         type: Boolean,
         required: true,
         default: true
-    },
-    ADDRESS: {
-        type: [String]
     }
-})
+},
+    {
+        timestamps: true
+    }
+)
 
 const user = model('user', user_schema);
 export default user

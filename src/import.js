@@ -8,9 +8,7 @@ import product from './model/product.js';
 import category from './model/category.js';
 import coupon from './model/coupon.js';
 import order from './model/order.js';
-import order_details from './model/order_details.js';
 import cart from './model/cart.js';
-import cart_details from './model/cart_details.js';
 import review from './model/review.js';
 
 export {
@@ -22,8 +20,6 @@ export {
     product,
     category,
     coupon, order,
-    order_details,
     cart,
-    cart_details,
     review
 }

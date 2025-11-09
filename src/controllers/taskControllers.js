@@ -1,5 +1,5 @@
 
-import { user, address, product, category, coupon, order, order_details, cart, cart_details, review } from "../import.js"
+import { user, address, product, category, coupon, order, cart, review } from "../import.js"
 
 export const get_all_task = async (req, res) => {
     try {
@@ -63,4 +63,8 @@ export const delete_category = async (req, res) => {
         console.log("Lỗi ở delete_category")
         res.status(500).json({ message: "Lỗi ở delete_category" })
     }
+}
+
+export const get_bestsellers = async (req, res) => {
+
 }

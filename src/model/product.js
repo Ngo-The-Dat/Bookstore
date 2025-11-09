@@ -47,7 +47,7 @@ const product_schema = new Schema({
     },
     VIEWCOUNT: {
         type: Number,
-        required: true
+        default: 0
     },
     CATEGORY: {
         type: Schema.Types.ObjectId,
