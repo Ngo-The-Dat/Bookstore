@@ -1,15 +1,6 @@
 
 import { user, address, product, category, coupon, order, cart, review } from "../import.js"
 
-export const get_all_task = async (req, res) => {
-    try {
-        res.status(200).send("ban co 200 task")
-    } catch (error) {
-        console.log("Lỗi ở getAllTask")
-        res.status(500).json({ message: "Lỗi hệ thống" });
-    }
-}
-
 export const get_all_categories = async (req, res) => {
     try {
         const category_list = await category.find()
@@ -65,6 +56,15 @@ export const delete_category = async (req, res) => {
     }
 }
 
+export const get_all_products = async (req, res) => {
+    try {
+        const books = await product.find()
+        res.json(books)
+    } catch (error) {
+        console.log("Lỗi ở get_all_products")
+        res.status(500).json({ message: "Lỗi ở get_all_products" })
+    }
+}
 export const get_bestsellers = async (req, res) => {
 
 }
