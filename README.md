@@ -1,3 +1,8 @@
+### Cài node_modules:
+```bash
+npm install
+```
+
 ### Cách compile:
 ```bash 
 npm run dev
