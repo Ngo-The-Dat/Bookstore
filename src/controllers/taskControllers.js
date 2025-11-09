@@ -1,70 +1,69 @@
 
+import mongoose from "mongoose"
 import { user, address, product, category, coupon, order, cart, review } from "../import.js"
 
-export const get_all_categories = async (req, res) => {
+export const get_all_documents = async (req, res) => {
     try {
-        const category_list = await category.find()
-        res.json(category_list)
+        const { collection_name } = req.params
+        const data = await mongoose.model(collection_name).find()
+        res.json(data)
     } catch (error) {
-        console.log("Lỗi ở getAllCategories")
-        res.status(500).json({ message: "Lỗi ở getAllCategories" })
+        console.log(`Không có collection nào tên ${collection_name}`)
+        res.status(500).json({ message: "Lỗi ở get_all_documents" })
     }
 }
 
-export const add_category = async (req, res) => {
+export const add_document = async (req, res) => {
     try {
-        const record = req.body;
-        const catalog = new category(record)
+        const { collection_name } = req.params
+        const Model = mongoose.model(collection_name)
+        const record = new Model(req.body)
+        const new_doc = await record.save()
 
-        const new_catalog = await catalog.save();
-        res.status(201).json(new_catalog)
+        res.status(201).json(new_doc)
     } catch (error) {
-        console.log("Lỗi ở add_category")
-        res.status(500).json({ message: "Lỗi ở add_category" })
+        console.log(`Không có collection tên ${collection_name}`)
+        res.status(500).json({ message: "Lỗi ở add_document" })
     }
 }
 
-export const update_category = async (req, res) => {
+export const update_a_document = async (req, res) => {
     try {
-        const record = req.body;
-        const updated_catalog = await category.findByIdAndUpdate(
-            req.params.id,
-            record,
-            { new: true }
-        );
-
-        if (!updated_catalog) {
-            return res.status(404).json({ message: "Nhiệm vụ không tồn tại" })
+        const { collection_name, id } = req.params
+        const Model = mongoose.model(collection_name)
+        const updated_document = await Model.findByIdAndUpdate(id, req.body, { new: true })
+        if (!update_a_document) {
+            res.status(404).json({ message: `Không tồn tại id ${id} để update` })
         }
-        res.status(200).json(updated_catalog)
+        res.status(201).json(updated_document)
     } catch (error) {
-        console.log("Lỗi ở update_category")
-        res.status(500).json({ message: "Lỗi ở update_category" })
+        console.log(`Không có collection tên ${collection_name}`)
+        res.status(500).json({ message: "Lỗi ở update_a_document" })
     }
+
 }
 
-export const delete_category = async (req, res) => {
+export const delete_document = async (req, res) => {
     try {
-        const deleted_catalog = await category.findByIdAndDelete(req.params.id)
-        if (!deleted_catalog) {
-            return res.status(404).json({ message: "Danh mục không tồn tại để xóa" })
+        const { collection_name, id } = req.params;
+        const Model = mongoose.model(collection_name)
+
+        const deleted_document = await Model.findByIdAndDelete(id)
+        if (!deleted_document) {
+            return res.status(404).json({ message: "Id không tồn tại để xóa" })
         }
-        res.status(200).json(delete_category)
+        res.status(200).json(deleted_document)
     } catch (error) {
-        console.log("Lỗi ở delete_category")
-        res.status(500).json({ message: "Lỗi ở delete_category" })
+        console.log(`Không có collection nào tên ${collection_name}`)
+        res.status(500).json({ message: "Lỗi ở delete_document" })
     }
 }
 
-export const get_all_products = async (req, res) => {
-    try {
-        const books = await product.find()
-        res.json(books)
-    } catch (error) {
-        console.log("Lỗi ở get_all_products")
-        res.status(500).json({ message: "Lỗi ở get_all_products" })
-    }
-}
+
 export const get_bestsellers = async (req, res) => {
+    try {
 
+    } catch (error) {
+
+    }
 }
