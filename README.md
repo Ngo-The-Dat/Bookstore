@@ -1,3 +1,6 @@
+### Cài đặt Node.js
+- Tải Node.js tại: https://nodejs.org/en/download/
+
 ### Cài node_modules:
 ```bash
 npm install
@@ -21,4 +24,3 @@ VD: muốn chạy file ```app.js``` thì sửa lại thành
 "scripts": {
     "dev": "nodemon app.js"
   }
-
