@@ -1,7 +1,7 @@
 import { mongoose, dotenv } from '../import.js';
 import { connectDB, closeDBConnection } from "../config/db.js";
-import User from './src/models/userModel.js';
-import UserAuth from './src/models/authModel.js';
+import User from '../model/user.js';
+import UserAuth from '../model/user_authentication.js';
 
 dotenv.config();
 
