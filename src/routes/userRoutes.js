@@ -1,5 +1,5 @@
 import express from 'express';
-import { get_all_users, delete_user, update_user } from '../controllers/userController.js';
+import { get_all_users, delete_user, update_user, get_current_user } from '../controllers/userController.js';
 import { protect, restrictTo } from '../controllers/authMiddleware.js';
 
 const router = express.Router();
