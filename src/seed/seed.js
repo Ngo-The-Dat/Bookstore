@@ -16,12 +16,21 @@ async function upsertMany(Model, items, keySelector) {
     const docs = [];
     for (const item of items) {
         const filter = keySelector(item);
-        const updated = await Model.findOneAndUpdate(
-            filter,
-            { $set: item },
-            { new: true, upsert: true }
-        );
-        docs.push(updated);
+
+        // 1. Tìm xem tài liệu đã tồn tại chưa
+        let doc = await Model.findOne(filter);
+
+        if (doc) {
+            // 2a. Nếu CÓ: Cập nhật các trường
+            Object.assign(doc, item);
+            const updated = await doc.save();
+            docs.push(updated);
+        } else {
+            // 2b. Nếu KHÔNG CÓ: Tạo mới
+            const newDoc = new Model(item);
+            const created = await newDoc.save();
+            docs.push(created);
+        }
     }
     return docs;
 }
@@ -86,7 +95,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             HOTEN: "Nguyễn Văn A",
             PHAI: "Nam",
             EMAIL: "user1@example.com",
-            PASSWORD: "Test@1234",
             SDT: "0912345678",
             NGAYSN: new Date("1995-05-20"),
             ROLE: "customer",
@@ -96,7 +104,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             HOTEN: "Trần Thị B",
             PHAI: "Nữ",
             EMAIL: "user2@example.com",
-            PASSWORD: "Aa@123456",
             SDT: "0987654321",
             NGAYSN: new Date("1998-09-10"),
             ROLE: "customer",
@@ -106,7 +113,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             HOTEN: "Lê Quốc Cường",
             PHAI: "Nam",
             EMAIL: "user3@example.com",
-            PASSWORD: "Strong@123",
             SDT: "0909123456",
             NGAYSN: new Date("1997-03-15"),
             ROLE: "admin",
@@ -116,7 +122,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             HOTEN: "Phạm Thùy Dung",
             PHAI: "Nữ",
             EMAIL: "user4@example.com",
-            PASSWORD: "Hello@2025",
             SDT: "0938123456",
             NGAYSN: new Date("2000-12-05"),
             ROLE: "customer",
@@ -126,7 +131,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             HOTEN: "Đỗ Minh Khang",
             PHAI: "Nam",
             EMAIL: "user5@example.com",
-            PASSWORD: "Admin@888",
             SDT: "0978123456",
             NGAYSN: new Date("1996-09-30"),
             ROLE: "admin",
