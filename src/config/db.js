@@ -11,6 +11,16 @@ export const connectDB = async () => {
         console.log("Error: ", error)
     }
 }
+
+export const closeDBConnection = async () => {
+    try {
+        await mongoose.connection.close();
+        console.log("Đã ngắt kết nối CSDL");
+    } catch (error) {
+        console.log("Error: ", error);
+    }
+};
+
 export const delete_all_collection = async () => {
     const collections = await mongoose.connection.db.listCollections().toArray()
     for (const { name } of collections) {

@@ -30,6 +30,13 @@ Tùy chọn cờ trực tiếp nếu muốn:
 node src/seed/seed.js --refresh
 ```
 
+### Tạo tài khoản admin
+Chỉnh sửa thông tin admin trong `src/seed/createAdmin.js` nếu cần.
+Chạy lệnh sau để tạo tài khoản admin:
+```bash
+npm run seed:createAdmin
+```
+
 ### Biến môi trường cần thiết
 Tạo file `.env` với biến kết nối MongoDB:
 ```

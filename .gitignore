@@ -12,3 +12,4 @@ build/
 .env.test.local
 .env.production.local
 *.yml
+Dockerfile

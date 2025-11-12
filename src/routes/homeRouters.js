@@ -10,6 +10,4 @@ router.post("/:collection_name", add_document)
 router.put("/:collection_name/:id", update_a_document)
 router.delete("/:collection_name/:id", delete_document)
 
-
-
 export default router;

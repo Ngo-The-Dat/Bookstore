@@ -1,12 +1,12 @@
-import { mongoose, dotenv, express, user, address, product, category, coupon, order, cart, review } from "./import.js"
-import homeRoute from "./routes/homeRouters.js"
-import { connectDB, delete_all_collection } from "./config/db.js";
+import { dotenv, express } from "./import.js"
+import { connectDB } from "./config/db.js";
+import cookieParser from "cookie-parser"
 import cors from "cors"
 
 dotenv.config();
 
 let port = process.env.PORT
-const app = express(port)
+const app = express()
 
 // kết nối với database
 connectDB().then(() => {
@@ -19,4 +19,43 @@ connectDB().then(() => {
 app.use(cors())
 // app.use(cors({origin: ["http://localhost:8000", "http://localhost:8002"]}))
 app.use(express.json())
+
+// Sử dụng cookie parser để đọc cookie từ request
+app.use(cookieParser());
+
+const sanitizeRecursive = (obj) => {
+    // Duyệt qua tất cả các key (khóa) trong đối tượng
+    for (const key in obj) {
+        // 1. Nếu key (khóa) bắt đầu bằng '$' (như $ne)
+        if (key.startsWith('$')) {
+            // Xoá nó đi
+            delete obj[key];
+        } 
+        // 2. Nếu giá trị (value) là một đối tượng khác
+        else if (typeof obj[key] === 'object' && obj[key] !== null) {
+            // "Đệ quy": Chạy lại hàm này cho đối tượng con
+            sanitizeRecursive(obj[key]);
+        }
+    }
+};
+
+// Đây là middleware mới của chúng ta
+const sanitizeMiddleware = (req, res, next) => {
+    // Chúng ta "dọn dẹp" nội dung BÊN TRONG các đối tượng này
+    if (req.body) sanitizeRecursive(req.body);
+    if (req.query) sanitizeRecursive(req.query);
+    if (req.params) sanitizeRecursive(req.params);
+    
+    next(); // Cho đi tiếp
+};
+
+app.use(sanitizeMiddleware);
+
+import homeRoute from "./routes/homeRouters.js"
 app.use("/home", homeRoute)
+
+import authRoute from "./routes/authRoutes.js"
+app.use("/auth", authRoute)
+
+import userRoute from "./routes/userRoutes.js"
+app.use("/users", userRoute)
