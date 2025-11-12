@@ -1,8 +1,24 @@
+import product from "../model/product.js";
 import Product from "../model/product.js";
 
 export const get_all_products = async (req, res) => {
     try {
-        const products = await Product.find();
+        let filter = {}
+        const { TACGIA, NXB, minPrice, maxPrice, sort, order } = req.query
+
+        if (TACGIA) filter.TACGIA = TACGIA
+        if (NXB) filter.NXB = NXB
+        if (minPrice || maxPrice) {
+            filter.GIABAN = {}
+            if (minPrice) filter.GIABAN.$gte = Number(minPrice)
+            if (maxPrice) filter.GIABAN.$lte = Number(maxPrice)
+        }
+        let sort_option = {};
+        if (sort) {
+            sort_option[sort] = order === 'desc' ? -1 : 1;
+        }
+
+        const products = await Product.find(filter).sort(sort_option);
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy danh sách sản phẩm", error: error.message });
@@ -51,5 +67,124 @@ export const get_product_by_id = async (req, res) => {
         res.status(200).json(product);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy thông tin sản phẩm", error: error.message });
+    }
+}
+
+export const get_bestsellers = async (req, res) => {
+    try {
+        const result = await order.aggregate([
+            { $unwind: "$ITEM" }, // tách từng ITEM trong mảng ra thành dòng riêng
+            {
+                $group: {
+                    _id: "$ITEM.PRODUCT",       // nhóm theo mã sản phẩm
+                    totalSold: { $sum: "$ITEM.QUANTITY" } // cộng dồn số lượng bán
+                }
+            },
+            {
+                $lookup: {                   // nối thêm thông tin sản phẩm
+                    from: "products",          // tên collection (chú ý: phải là "products" vì MongoDB tự thêm 's')
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "product_info"
+                }
+            },
+            { $unwind: "$product_info" }, // lấy object thay vì mảng
+            { $sort: { totalSold: -1 } }, // sắp xếp giảm dần theo số lượng bán
+            { $limit: 10 },               // lấy top 10 sản phẩm bán chạy
+            {
+                $project: {                 // chỉ hiển thị một số trường cần thiết
+                    _id: 0,
+                    productId: "$_id",
+                    name: "$product_info.TENSACH",
+                    totalSold: 1,
+                    price: "$product_info.GIABAN",
+                    img: "$product_info.IMG_URL"
+                }
+            }
+        ]);
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi ở get_bestsellers" })
+    }
+}
+
+export const get_most_view_books = async (req, res) => {
+    try {
+        const result = await product.aggregate([
+            { $sort: { VIEWCOUNT: -1 } },
+            { $limit: 10 }
+        ])
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi ở get_most_view_books" })
+    }
+}
+
+export const search_products = async (req, res) => {
+    try {
+        const { name } = req.query; // lấy từ query param
+        console.log(name)
+        if (!name || name.length < 1) {
+            return res.status(400).json({ message: "Vui lòng nhập từ khóa" });
+        }
+
+        // tìm sách có tên chứa từ khóa (case-insensitive)
+        const products = await product.find({
+            TENSACH: { $regex: `^${name}`, $options: "i" } // i = không phân biệt hoa thường
+        })
+            .limit(10); // giới hạn số kết quả trả về
+
+        res.json(products);
+    } catch (error) {
+        console.error("Lỗi ở search_products");
+        res.status(500).json({ message: "Lỗi ở search_products" });
+    }
+};
+
+export const get_all_NXB = async (req, res) => {
+    try {
+        const nxb = await product.aggregate([
+            {
+                $group: {
+                    _id: "$NXB",
+                    total_books: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    NXB: "$_id",
+                    total_books: "$total_books"
+                }
+            }
+        ])
+
+        res.status(200).json(nxb)
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi ở get_all_NXB" })
+    }
+}
+
+export const get_all_TACGIA = async (req, res) => {
+    try {
+        const nxb = await product.aggregate([
+            {
+                $group: {
+                    _id: "$TACGIA",
+                    total_books: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    NXB: "$_id",
+                    total_books: "$total_books"
+                }
+            }
+        ])
+
+        res.status(200).json(nxb)
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi ở get_all_TACGIA" })
     }
 }
