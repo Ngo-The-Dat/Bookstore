@@ -60,7 +60,7 @@ const Header = () => {
             </PopoverContent>
           </Popover>
 
-          <div className="relative w-full max-w-lg">
+          <div className="relative w-full max-w-2xl lg:w-[900px]">
             <Input
               type="search"
               placeholder="Tìm kiếm sản phẩm..."
@@ -102,5 +102,6 @@ const Header = () => {
     </header>
   );
 };
+
 
 export default Header;
