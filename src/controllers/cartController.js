@@ -1,5 +1,5 @@
-import Cart from "../model/cart.js"
-import Product from "../model/product.js"
+import Cart from "../models/cart.js"
+import Product from "../models/product.js"
 import { isValidObjectId } from "mongoose"
 
 // Lấy giỏ hàng của 1 user

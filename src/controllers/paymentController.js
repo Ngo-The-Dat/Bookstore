@@ -1,5 +1,5 @@
-import Order from "../model/order.js"
-import Coupon from "../model/coupon.js"
+import Order from "../models/order.js"
+import Coupon from "../models/coupon.js"
 
 // Thanh toán đơn hàng (giả lập hoặc cập nhật trạng thái sau khi thanh toán thành công)
 export const processPayment = async (req, res) => {

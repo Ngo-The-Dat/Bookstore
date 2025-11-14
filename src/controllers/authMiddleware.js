@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../model/user.js';
+import User from '../models/user.js';
 
 // Middleware này kiểm tra xem user đã đăng nhập chưa
 export const protect = async (req, res, next) => {
@@ -43,7 +43,7 @@ export const restrictTo = (...roles) => {
             // 403 Forbidden: Tôi biết bạn là ai, nhưng bạn không có quyền
             return res.status(403).json({ message: "Bạn không có quyền thực hiện hành động này." });
         }
-        
+
         next(); // Cho đi tiếp nếu là admin
     };
 };

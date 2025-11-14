@@ -1,7 +1,7 @@
-import Order from "../model/order.js"
-import Cart from "../model/cart.js"
-import Coupon from "../model/coupon.js"
-import User from "../model/user.js"
+import Order from "../models/order.js"
+import Cart from "../models/cart.js"
+import Coupon from "../models/coupon.js"
+import User from "../models/user.js"
 import { isValidObjectId } from "mongoose"
 
 // Tạo đơn hàng mới

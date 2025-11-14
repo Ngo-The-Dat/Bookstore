@@ -1,4 +1,4 @@
-import User from '../model/user.js';
+import User from '../models/user.js';
 
 export const get_all_users = async (req, res) => {
     try {
@@ -34,6 +34,19 @@ export const get_current_user = async (req, res) => {
     try {
         const currentUser = req.user;
         res.status(200).json(currentUser);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi khi lấy thông tin người dùng", error: error.message });
+    }
+}
+
+export const get_user_by_id = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "Người dùng không tồn tại" });
+        }
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy thông tin người dùng", error: error.message });
     }

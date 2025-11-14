@@ -1,15 +1,15 @@
-//import all model and library
+//import all models and library
 import mongoose from 'mongoose';
 import dotenv from "dotenv";
 import express from "express";
-import user from "./model/user.js";
-import address from "./model/address.js"
-import product from './model/product.js';
-import category from './model/category.js';
-import coupon from './model/coupon.js';
-import order from './model/order.js';
-import cart from './model/cart.js';
-import review from './model/review.js';
+import user from "./models/user.js";
+import address from "./models/address.js"
+import product from './models/product.js';
+import category from './models/category.js';
+import coupon from './models/coupon.js';
+import order from './models/order.js';
+import cart from './models/cart.js';
+import review from './models/review.js';
 
 export {
     mongoose,
