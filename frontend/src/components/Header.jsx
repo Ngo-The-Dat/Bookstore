@@ -91,7 +91,7 @@ const Header = () => {
           </Link>
           
           {/* Nút Tài khoản */}
-          <Link to="/account">
+          <Link to="/login">
             <Button variant="ghost" className="rounded-full" size="icon">
               <User className="h-5 w-5" />
               <span className="sr-only">Tài khoản</span>
@@ -105,3 +105,4 @@ const Header = () => {
 
 
 export default Header;
+
