@@ -39,14 +39,12 @@ const sanitizeRecursive = (obj) => {
     }
 };
 
-// Đây là middleware mới của chúng ta
 const sanitizeMiddleware = (req, res, next) => {
-    // Chúng ta "dọn dẹp" nội dung BÊN TRONG các đối tượng này
     if (req.body) sanitizeRecursive(req.body);
     if (req.query) sanitizeRecursive(req.query);
     if (req.params) sanitizeRecursive(req.params);
     
-    next(); // Cho đi tiếp
+    next();
 };
 
 app.use(sanitizeMiddleware);
@@ -59,6 +57,9 @@ app.use("/auth", authRoute)
 
 import userRoute from "./routes/userRoutes.js"
 app.use("/users", userRoute)
+
+import productRoute from "./routes/productRoutes.js"
+app.use("/products", productRoute)
 
 import cartRoute from "./routes/cartRoutes.js"
 app.use("/cart", cartRoute)
