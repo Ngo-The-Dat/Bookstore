@@ -1,0 +1,29 @@
+{
+  "name": "test-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "dev": "nodemon src/main.js",
+    "seed": "node src/seed/seed.js",
+    "seed:refresh": "node src/seed/seed.js --refresh"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "lucide-react": "^0.553.0",
+    "mongoose": "^8.19.2",
+    "react-router": "^7.9.5",
+    "sonner": "^2.0.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
