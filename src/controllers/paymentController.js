@@ -1,13 +1,16 @@
 import Order from "../models/order.js"
 import Coupon from "../models/coupon.js"
+import { isValidObjectId } from "mongoose"
 
 // Thanh toán đơn hàng (giả lập hoặc cập nhật trạng thái sau khi thanh toán thành công)
 export const processPayment = async (req, res) => {
   try {
     const { orderId } = req.params
     const { paymentMethod, isSuccess } = req.body
-    // paymentMethod: "CASH", "BANK_TRANSFER", "E_WALLET", "PAYPAL", "VNPAY", ...
-    // isSuccess: true / false
+
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ message: "orderId không hợp lệ" })
+    }
 
     const order = await Order.findById(orderId)
     if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" })
@@ -50,6 +53,11 @@ export const processPayment = async (req, res) => {
 export const refundPayment = async (req, res) => {
   try {
     const { orderId } = req.params
+
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({ message: "orderId không hợp lệ" })
+    }
+
     const order = await Order.findById(orderId)
     if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" })
 

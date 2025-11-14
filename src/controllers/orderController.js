@@ -7,7 +7,7 @@ import { isValidObjectId } from "mongoose"
 // Tạo đơn hàng mới
 export const createOrder = async (req, res) => {
   try {
-    const { userId } = req.params
+    const userId = req.user?._id
     const { shippingAddress, couponCode, paymentMethod } = req.body
 
     if (!isValidObjectId(userId)) {
@@ -68,13 +68,15 @@ export const createOrder = async (req, res) => {
       DISCOUNT_AMOUNT: discountAmount,
       GRAND_TOTAL: grandTotal,
       PAYMENT_METHOD: paymentMethod || "CASH",
+      PAYMENT_STATUS: paymentMethod === "CASH" || !paymentMethod ? "PAID" : "PENDING",
       ITEM: items,
     })
 
     await newOrder.save()
 
-    // Cân nhắc: chỉ clear giỏ hàng sau khi thanh toán thành công.
-    await Cart.findOneAndDelete({ USER: userId })
+    // Chỉ clear giỏ hàng sau khi thanh toán thành công.
+    if (newOrder.PAYMENT_STATUS === "PAID")
+      await Cart.findOneAndDelete({ USER: userId })
 
     res.status(201).json({ message: "Tạo đơn hàng thành công", order: newOrder })
   } catch (err) {
@@ -86,7 +88,8 @@ export const createOrder = async (req, res) => {
 // Lấy lịch sử đơn hàng của người dùng
 export const getOrderHistory = async (req, res) => {
   try {
-    const { userId } = req.params
+    const userId = req.user?._id
+    
     if (!isValidObjectId(userId)) {
       return res.status(400).json({ message: "userId không hợp lệ" })
     }

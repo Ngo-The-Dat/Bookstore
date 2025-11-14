@@ -5,7 +5,8 @@ import { isValidObjectId } from "mongoose"
 // Lấy giỏ hàng của 1 user
 export const getCartByUser = async (req, res) => {
   try {
-    const { userId } = req.params
+    const userId = req.user?._id
+
     if (!isValidObjectId(userId)) {
       return res.status(400).json({ message: "userId không hợp lệ" })
     }
@@ -22,7 +23,7 @@ export const getCartByUser = async (req, res) => {
 // Thêm sản phẩm vào giỏ
 export const addToCart = async (req, res) => {
   try {
-    const { userId } = req.params
+    const userId = req.user?._id
     const { productId, quantity } = req.body
 
     if (!isValidObjectId(userId) || !isValidObjectId(productId)) {
@@ -74,7 +75,8 @@ export const addToCart = async (req, res) => {
 // Cập nhật số lượng sản phẩm trong giỏ
 export const updateCartItem = async (req, res) => {
   try {
-    const { userId, productId } = req.params
+    const userId = req.user?._id
+    const { productId } = req.params
     const { quantity } = req.body
 
     if (!isValidObjectId(userId) || !isValidObjectId(productId)) {
@@ -115,7 +117,9 @@ export const updateCartItem = async (req, res) => {
 // Xóa 1 sản phẩm khỏi giỏ
 export const removeCartItem = async (req, res) => {
   try {
-    const { userId, productId } = req.params
+    const userId = req.user?._id
+    const { productId } = req.params
+
     if (!isValidObjectId(userId) || !isValidObjectId(productId)) {
       return res.status(400).json({ message: "ID không hợp lệ" })
     }
@@ -136,7 +140,8 @@ export const removeCartItem = async (req, res) => {
 // Xóa toàn bộ giỏ
 export const clearCart = async (req, res) => {
   try {
-    const { userId } = req.params
+    const userId = req.user?._id
+
     if (!isValidObjectId(userId)) {
       return res.status(400).json({ message: "userId không hợp lệ" })
     }
