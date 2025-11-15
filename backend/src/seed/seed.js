@@ -1,24 +1,24 @@
 // Seed script to insert sample data for testing APIs
 import { connectDB, delete_all_collection } from "../config/db.js";
 import mongoose from "mongoose";
-import userModel from "../model/user.js";
-import addressModel from "../model/address.js";
-import categoryModel from "../model/category.js";
-import productModel from "../model/product.js";
-import couponModel from "../model/coupon.js";
-import cartModel from "../model/cart.js";
-import reviewModel from "../model/review.js";
-import userAuthModel from "../model/user_authentication.js";
-import orderModel from "../model/order.js";
+import userModel from "../models/user.js";
+import addressModel from "../models/address.js";
+import categoryModel from "../models/category.js";
+import productModel from "../models/product.js";
+import couponModel from "../models/coupon.js";
+import cartModel from "../models/cart.js";
+import reviewModel from "../models/review.js";
+import userAuthModel from "../models/user_authentication.js";
+import orderModel from "../models/order.js";
 
 // Small helper to upsert by a key selector
-async function upsertMany(Model, items, keySelector) {
+async function upsertMany(models, items, keySelector) {
     const docs = [];
     for (const item of items) {
         const filter = keySelector(item);
 
         // 1. Tìm xem tài liệu đã tồn tại chưa
-        let doc = await Model.findOne(filter);
+        let doc = await models.findOne(filter);
 
         if (doc) {
             // 2a. Nếu CÓ: Cập nhật các trường
@@ -27,7 +27,7 @@ async function upsertMany(Model, items, keySelector) {
             docs.push(updated);
         } else {
             // 2b. Nếu KHÔNG CÓ: Tạo mới
-            const newDoc = new Model(item);
+            const newDoc = new models(item);
             const created = await newDoc.save();
             docs.push(created);
         }
