@@ -5,7 +5,7 @@ import cors from "cors"
 
 dotenv.config();
 
-let port = process.env.PORT
+let port = process.env.PORT || 8000
 const app = express()
 
 // kết nối với database
@@ -66,3 +66,12 @@ app.use('/addresses', addressRoute)
 
 import reviewRoute from "./routes/reviewRoutes.js"
 app.use('/reviews', reviewRoute)
+
+import cartRoute from "./routes/cartRoutes.js"
+app.use("/cart", cartRoute)
+
+import orderRoute from "./routes/orderRoutes.js"
+app.use("/orders", orderRoute)
+
+import paymentRoute from "./routes/paymentRoutes.js"
+app.use("/payments", paymentRoute)
