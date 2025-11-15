@@ -3,6 +3,15 @@ import Product from "../models/product.js";
 
 export const get_all_products = async (req, res) => {
     try {
+        const products = await Product.find()
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi khi lấy danh sách sản phẩm", error: error.message });
+    }
+}
+
+export const get_filter_products = async (req, res) => {
+    try {
         let filter = {}
         const { TACGIA, NXB, minPrice, maxPrice, sort, order } = req.query
 
