@@ -75,3 +75,6 @@ app.use("/orders", orderRoute)
 
 import paymentRoute from "./routes/paymentRoutes.js"
 app.use("/payments", paymentRoute)
+
+import imageRoute from "./routes/imageRoutes.js"
+app.use("/images", imageRoute)
