@@ -129,6 +129,19 @@ export const get_most_view_books = async (req, res) => {
     }
 }
 
+function removeVietnameseTones(str) {
+    str = str.replace(/á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, "a");
+    str = str.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, "e");
+    str = str.replace(/i|í|ì|ỉ|ĩ|ị/gi, "i");
+    str = str.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, "o");
+    str = str.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, "u");
+    str = str.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, "y");
+    str = str.replace(/đ/gi, "d");
+    // bỏ dấu câu và khoảng trắng thừa
+    str = str.replace(/\s+/g, ' ').trim();
+    return str;
+}
+
 export const search_products = async (req, res) => {
     try {
         const { name } = req.query; // lấy từ query param
@@ -136,6 +149,8 @@ export const search_products = async (req, res) => {
         if (!name || name.length < 1) {
             return res.status(400).json({ message: "Vui lòng nhập từ khóa" });
         }
+
+        name = removeVietnameseTones(name)
 
         // tìm sách có tên chứa từ khóa (case-insensitive)
         const products = await product.find({
