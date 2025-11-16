@@ -1,5 +1,5 @@
 import product from "../models/product.js";
-import Product from "../models/product.js";
+import order from "../models/order.js";
 
 export const get_all_products = async (req, res) => {
     try {
@@ -107,13 +107,13 @@ export const get_bestsellers = async (req, res) => {
                     name: "$product_info.TENSACH",
                     totalSold: 1,
                     price: "$product_info.GIABAN",
-                    img: "$product_info.IMG_URL"
+                    img: "$product_info.IMG"
                 }
             }
         ]);
         res.status(201).json(result)
     } catch (error) {
-        res.status(500).json({ message: "Lỗi ở get_bestsellers" })
+        res.status(500).json({ message: "Lỗi ở get_bestsellers", error: error.message })
     }
 }
 
