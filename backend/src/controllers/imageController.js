@@ -69,6 +69,18 @@ export const get_image = async (req, res) => {
     }
 }
 
+export const get_image_url = async (req, res) => {
+    try {
+        const url = await get_url(req.query.name)
+        res.status(200).json({
+            success: true,
+            url: url
+        });
+    } catch (error) {
+        res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở get_image_url", error: error.message }))
+    }
+}
+
 export const delete_image = async (req, res) => {
     try {
         await delete_from_s3(req.query.name)
