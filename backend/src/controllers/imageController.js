@@ -1,4 +1,4 @@
-import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { s3 } from "../config/aws.js";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from 'sharp'
@@ -77,3 +77,14 @@ export const delete_image = async (req, res) => {
         res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở delete_image", error: error.message }))
     }
 }
+
+export const list_images_name = async (req, res) => {
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME
+    };
+
+    const command = new ListObjectsV2Command(params);
+    const response = await s3.send(command);
+    res.status(200).json(response.Contents?.map(obj => obj.Key) || [])
+}
+
