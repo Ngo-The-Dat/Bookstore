@@ -18,12 +18,10 @@ const product_schema = new Schema({
     },
     MOTA: {
         type: String,
-        // required: [true, "Vui lòng nhập mô tả sách"],
         trim: true
     },
-    IMG_URL: {
-        type: String,
-        required: [true, "Vui lòng nhập đường dẫn hình ảnh"]
+    IMG: {
+        type: [String]
     },
     TACGIA: {
         type: String,
