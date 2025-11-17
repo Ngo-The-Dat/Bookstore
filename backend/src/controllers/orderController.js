@@ -17,14 +17,14 @@ export const createOrder = async (req, res) => {
     const user = await User.findById(userId)
     if (!user) return res.status(404).json({ message: "Không tìm thấy người dùng" })
 
-    const cart = await Cart.findOne({ USER: userId }).populate("CART_DETAIL.PRODUCT")
+    const cart = await Cart.findOne({ USER: userId })
     if (!cart || cart.CART_DETAIL.length === 0) {
       return res.status(400).json({ message: "Giỏ hàng trống" })
     }
 
     // Tính tổng tiền hàng
     const subTotal = cart.CART_DETAIL.reduce(
-      (sum, item) => sum + item.PRODUCT.PRICE * item.QUANTITY,
+      (sum, item) => sum + item.PRODUCT.GIABAN * item.QUANTITY,
       0
     )
 
@@ -43,6 +43,10 @@ export const createOrder = async (req, res) => {
         coupon.DISCOUNT_TYPE === "PERCENTAGE"
           ? Math.round((subTotal * coupon.DISCOUNT_VALUE) / 100)
           : coupon.DISCOUNT_VALUE
+
+      // Cập nhật số lần sử dụng mã
+      coupon.USAGE_COUNT += 1
+      await coupon.save()
     }
 
     // Phí giao hàng (giả sử tạm 30k)
@@ -52,10 +56,10 @@ export const createOrder = async (req, res) => {
     // Tạo mảng ITEM từ giỏ hàng
     const items = cart.CART_DETAIL.map(item => ({
       PRODUCT: item.PRODUCT._id,
-      NAME: item.PRODUCT.TENSACH || item.PRODUCT.NAME,
-      PRICE_AT_PURCHASE: item.PRODUCT.PRICE,
+      NAME: item.PRODUCT.TENSACH,
+      PRICE_AT_PURCHASE: item.PRODUCT.GIABAN || 0,
       QUANTITY: item.QUANTITY,
-      TOTAL: item.PRODUCT.PRICE * item.QUANTITY
+      TOTAL: item.PRODUCT.GIABAN * item.QUANTITY
     }))
 
     // Tạo đơn hàng mới
