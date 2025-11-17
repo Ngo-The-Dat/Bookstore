@@ -35,7 +35,7 @@ const delete_from_s3 = async (name) => {
     await s3.send(command)
 }
 
-const get_url = async (name) => {
+export const get_url = async (name) => {
     const params = new GetObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: name
