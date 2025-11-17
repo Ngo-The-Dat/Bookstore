@@ -3,7 +3,7 @@ import order from "../models/order.js";
 
 export const get_all_products = async (req, res) => {
     try {
-        const products = await Product.find()
+        const products = await product.find()
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy danh sách sản phẩm", error: error.message });
@@ -27,7 +27,7 @@ export const get_filter_products = async (req, res) => {
             sort_option[sort] = order === 'desc' ? -1 : 1;
         }
 
-        const products = await Product.find(filter).sort(sort_option);
+        const products = await product.find(filter).sort(sort_option);
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy danh sách sản phẩm", error: error.message });
@@ -37,7 +37,7 @@ export const get_filter_products = async (req, res) => {
 export const add_product = async (req, res) => {
     try {
         const productData = req.body;
-        const newProduct = new Product(productData);
+        const newProduct = new product(productData);
         await newProduct.save();
         res.status(201).json(newProduct);
     } catch (error) {
@@ -48,7 +48,7 @@ export const add_product = async (req, res) => {
 export const delete_product = async (req, res) => {
     try {
         const productId = req.params.id;
-        await Product.findByIdAndDelete(productId);
+        await product.findByIdAndDelete(productId);
         res.status(200).json({ message: "Xóa sản phẩm thành công" });
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi xóa sản phẩm", error: error.message });
@@ -57,9 +57,9 @@ export const delete_product = async (req, res) => {
 
 export const update_product = async (req, res) => {
     try {
-        const productId = req.params.id;
+        const productId = req.query.id;
         const updateData = req.body;
-        const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+        const updatedProduct = await product.findByIdAndUpdate(productId, updateData, { new: true });
         res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi cập nhật sản phẩm", error: error.message });
@@ -68,12 +68,12 @@ export const update_product = async (req, res) => {
 
 export const get_product_by_id = async (req, res) => {
     try {
-        const productId = req.params.id;
-        const product = await Product.findById(productId);
-        if (!product) {
+        const productId = req.query.id;
+        const book = await product.findById(productId);
+        if (!book) {
             return res.status(404).json({ message: "Sản phẩm không tồn tại" });
         }
-        res.status(200).json(product);
+        res.status(200).json(book);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy thông tin sản phẩm", error: error.message });
     }
@@ -85,7 +85,7 @@ export const get_bestsellers = async (req, res) => {
             { $unwind: "$ITEM" }, // tách từng ITEM trong mảng ra thành dòng riêng
             {
                 $group: {
-                    _id: "$ITEM.PRODUCT",       // nhóm theo mã sản phẩm
+                    _id: "$ITEM.product",       // nhóm theo mã sản phẩm
                     totalSold: { $sum: "$ITEM.QUANTITY" } // cộng dồn số lượng bán
                 }
             },

@@ -46,15 +46,18 @@ const get_url = async (name) => {
 export const upload_images = async (req, res) => {
     try {
         const files = req.files;
+        const filename = []
         for (const file of files) {
             await upload_to_s3(file)
+            filename.push(file.originalname)
         }
 
         res.status(200).json({
             success: true,
+            images: filename
         })
     } catch (error) {
-        res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở upload_images", error: error.message }))
+        res.status(500).json({ message: "Đã có lỗi xảy ra ở upload_images", error: error.message })
     }
 }
 
@@ -65,7 +68,7 @@ export const get_image = async (req, res) => {
         result.Body.pipe(res);
 
     } catch (error) {
-        res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở get_image", error: error.message }))
+        res.status(500).json({ message: "Đã có lỗi xảy ra ở get_image", error: error.message })
     }
 }
 
@@ -77,7 +80,7 @@ export const get_image_url = async (req, res) => {
             url: url
         });
     } catch (error) {
-        res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở get_image_url", error: error.message }))
+        res.status(500).json({ message: "Đã có lỗi xảy ra ở get_image_url", error: error.message })
     }
 }
 
@@ -86,17 +89,37 @@ export const delete_image = async (req, res) => {
         await delete_from_s3(req.query.name)
         res.status(201).json({ message: `Đã xóa thành công ${req.query.name}` })
     } catch (error) {
-        res.status(500).json(res.status(500).json({ message: "Đã có lỗi xảy ra ở delete_image", error: error.message }))
+        res.status(500).json({ message: "Đã có lỗi xảy ra ở delete_image", error: error.message })
     }
 }
 
 export const list_images_name = async (req, res) => {
-    const params = {
-        Bucket: process.env.AWS_BUCKET_NAME
-    };
+    try {
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME
+        };
 
-    const command = new ListObjectsV2Command(params);
-    const response = await s3.send(command);
-    res.status(200).json(response.Contents?.map(obj => obj.Key) || [])
+        const command = new ListObjectsV2Command(params);
+        const response = await s3.send(command);
+        res.status(200).json(response.Contents?.map(obj => obj.Key) || [])
+    } catch (error) {
+        res.status(500).json({ message: `Lỗi ở list_images_name`, error: error.message })
+    }
+
 }
 
+export const get_multi_image_url = async (req, res) => {
+    try {
+        const names = req.query.names.split(',');
+        const urls = []
+
+        for (const name of names) {
+            const url = await get_url(name.trim())
+            urls.push(url)
+        }
+        res.status(200).json({ success: true, urls })
+
+    } catch (error) {
+        res.status(500).json({ message: `Lỗi ở get_multi_image_url`, error: error.message })
+    }
+}
