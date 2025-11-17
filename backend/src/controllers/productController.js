@@ -98,7 +98,7 @@ export const get_bestsellers = async (req, res) => {
             { $unwind: "$ITEM" }, // tách từng ITEM trong mảng ra thành dòng riêng
             {
                 $group: {
-                    _id: "$ITEM.product",       // nhóm theo mã sản phẩm
+                    _id: "$ITEM.PRODUCT",       // nhóm theo mã sản phẩm
                     totalSold: { $sum: "$ITEM.QUANTITY" } // cộng dồn số lượng bán
                 }
             },
