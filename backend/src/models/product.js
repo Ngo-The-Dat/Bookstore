@@ -20,8 +20,11 @@ const product_schema = new Schema({
         type: String,
         trim: true
     },
-    IMG: {
+    IMG_DETAIL: {
         type: [String]
+    },
+    IMG_CARD: {
+        type: String
     },
     TACGIA: {
         type: String,

@@ -1,6 +1,5 @@
 import product from "../models/product.js";
 import order from "../models/order.js";
-import {get_url} from "./imageController.js"
 
 export const get_all_products = async (req, res) => {
     try {
@@ -75,18 +74,7 @@ export const get_product_by_id = async (req, res) => {
             return res.status(404).json({ message: "Sản phẩm không tồn tại" });
         }
 
-        const signedUrls = [];
-
-        if (book.IMG && book.IMG.length > 0) {
-            for (const name of book.IMG) {
-                const url = await get_url(name);
-                signedUrls.push(url);
-            }
-        }
-        res.status(200).json({
-            ...book.toObject(),
-            IMAGE_URL: signedUrls
-        });
+        res.status(200).json(book);
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi lấy thông tin sản phẩm", error: error.message });
     }
