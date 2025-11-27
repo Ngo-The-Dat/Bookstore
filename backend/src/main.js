@@ -2,6 +2,7 @@ import { dotenv, express } from "./import.js"
 import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ connectDB().then(() => {
     })
 })
 
+app.use(bodyParser.json())
 // cho phép frontend kết nối với database
 app.use(cors())
 // app.use(cors({origin: ["http://localhost:8000", "http://localhost:8002"]}))
@@ -78,3 +80,6 @@ app.use("/payments", paymentRoute)
 
 import imageRoute from "./routes/imageRoutes.js"
 app.use("/images", imageRoute)
+
+import AIRoute from "./routes/AIRoutes.js"
+app.use("/AI", AIRoute)
