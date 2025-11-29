@@ -15,13 +15,13 @@ const BookCard = ({ book }) => {
     let isMounted = true;
 
     const fetchImageUrl = async () => {
-      if (!book || !Array.isArray(book.IMG) || book.IMG.length === 0) {
+      if (!book || book.IMG_CARD.length === 0) {
         // không có ảnh: dùng placeholder
         if (isMounted) setImageUrl('https://via.placeholder.com/400x600.png?text=No+Image');
         return;
       }
 
-      const coverImageName = book.IMG[0];
+      const coverImageName = book.IMG_CARD;
       try {
         const API_BASE_URL = import.meta.env.VITE_API_URL || "";
         const endpoint = `${API_BASE_URL}/images/urls`;
@@ -77,8 +77,8 @@ const BookCard = ({ book }) => {
   if (!book) return null;
 
   return (
-    <div className="flex-shrink-0 w-48 group">
-      <Card className="h-full border-transparent shadow-md hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1 overflow-hidden">
+    <div className="flex-shrink-0 w-50 group">
+      <Card className="h-full border-transparent shadow-md hover:shadow-xl transition-all duration-300 transform hover:shadow-purple-300 overflow-hidden">
         <Link to={`/book/${book._id}`} className="block">
           <CardHeader className="p-0 relative bg-gray-100 h-60 overflow-hidden flex items-center justify-center">
             {imageUrl ? (
