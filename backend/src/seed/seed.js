@@ -472,7 +472,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             const qty = randomInt(1, 3);
             chosen.push({
                 PRODUCT: prod._id,
-                NAME: prod.TENSACH,
                 PRICE_AT_PURCHASE: prod.GIABAN,
                 QUANTITY: qty,
                 TOTAL: prod.GIABAN * qty,
