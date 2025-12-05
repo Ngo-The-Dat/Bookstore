@@ -21,16 +21,3 @@ export const converse = async (req, res) => {
         res.status(500).json({ message: "Lỗi ở converse", error: error })
     }
 }
-
-export const embedding_text = async (req, res) => {
-    try {
-        const message = req.body.message;
-        const result = await ai.models.embedContent({
-            model: 'gemini-embedding-001',
-            contents: message
-        })
-        res.status(201).send(result.embeddings)
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi ở embedding_text", error: error })
-    }
-}
