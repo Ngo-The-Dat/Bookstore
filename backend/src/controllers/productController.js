@@ -145,7 +145,7 @@ function removeVietnameseTones(str) {
 
 export const search_products = async (req, res) => {
     try {
-        const { name } = req.query; // lấy từ query param
+        let { name } = req.query; // lấy từ query param
         console.log(name)
         if (!name || name.length < 1) {
             return res.status(400).json({ message: "Vui lòng nhập từ khóa" });
@@ -155,13 +155,12 @@ export const search_products = async (req, res) => {
 
         // tìm sách có tên chứa từ khóa (case-insensitive)
         const products = await product.find({
-            TENSACH: { $regex: `^${name}`, $options: "i" } // i = không phân biệt hoa thường
+            TENSACH: { $regex: name, $options: "i" } // i = không phân biệt hoa thường
         })
             .limit(10); // giới hạn số kết quả trả về
 
-        res.json(products);
+        res.status(201).json(products);
     } catch (error) {
-        console.error("Lỗi ở search_products");
         res.status(500).json({ message: "Lỗi ở search_products" });
     }
 };
