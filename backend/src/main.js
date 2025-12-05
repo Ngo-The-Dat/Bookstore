@@ -83,3 +83,6 @@ app.use("/images", imageRoute)
 
 import AIRoute from "./routes/AIRoutes.js"
 app.use("/AI", AIRoute)
+
+import categoryRoute from "./routes/categoryRoute.js"
+app.use("/categories", categoryRoute)
