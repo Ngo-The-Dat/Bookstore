@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import axios from "axios";
 
 
-
 const HomePage = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
@@ -20,11 +19,13 @@ const HomePage = () => {
 
   const fetchBook = async () => {
     try {
-      const resBestSeller  = await axios.get("http://localhost:8000/home/best_seller");
+      const API = import.meta.env.VITE_API_URL;
+
+      const resBestSeller  = await axios.get(`${API}/products/get_all_products`);
       setBestSellers(resBestSeller.data);
       console.log(resBestSeller.data);
 
-      const resNewArrivals = await axios.get("http://localhost:8000/home/best_seller");
+      const resNewArrivals = await axios.get(`${API}/products/get_all_products`);
       setNewArrivals(resNewArrivals.data);
       console.log(resNewArrivals.data);
 

@@ -1,0 +1,16 @@
+import express from 'express'
+import { upload } from '../middlewares/multer.js'
+import { delete_image, get_image, get_image_url, get_multi_image_url, list_images_name, upload_images, upload_images_card, upload_images_detail } from '../controllers/imageController.js'
+
+const router = express.Router()
+
+router.post('/', upload.array('image', 10), upload_images);
+router.get('/', get_image)
+router.delete('/', delete_image)
+router.get('/list', list_images_name)
+router.get('/url', get_image_url)
+router.get('/urls', get_multi_image_url)
+router.post('/card', upload.array('image', 10), upload_images_card)
+router.post('/detail', upload.array('image', 10), upload_images_detail)
+
+export default router

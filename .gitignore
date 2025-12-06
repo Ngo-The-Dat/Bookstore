@@ -13,3 +13,4 @@ build/
 .env.production.local
 *.yml
 Dockerfile
+nginx.conf

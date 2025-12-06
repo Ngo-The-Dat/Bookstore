@@ -21,5 +21,10 @@ const review_schema = new Schema({
 }, { timestamps: true }
 )
 
+review_schema.index(
+    { USER: 1, PRODUCT: 1 },
+    { unique: true, }
+)
+
 const review = model('review', review_schema)
 export default review

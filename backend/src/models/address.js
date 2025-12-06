@@ -18,5 +18,13 @@ const address_schema = new Schema({
     }
 })
 
+address_schema.index(
+    { USER: 1, IS_DEFAULT: 1 },
+    {
+        unique: true,
+        partialFilterExpression: { IS_DEFAULT: true }
+    }
+)
+
 const address = model('address', address_schema)
 export default address

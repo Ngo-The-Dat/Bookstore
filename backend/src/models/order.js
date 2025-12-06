@@ -76,9 +76,6 @@ const order_schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'product'
         },
-        NAME: {
-            type: "String"
-        },
         PRICE_AT_PURCHASE: {
             type: Number,
             required: true
