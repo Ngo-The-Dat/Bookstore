@@ -1,6 +1,6 @@
 import express from "express"
 import { getCartByUser, addToCart, updateCartItem, removeCartItem, clearCart } from "../controllers/cartController.js"
-import { protect } from "../controllers/authMiddleware.js"
+import { protect } from "../middlewares/auth.js"
 
 const router = express.Router()
 

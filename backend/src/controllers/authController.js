@@ -23,7 +23,7 @@ export const signup = async (req, res) => {
         const newAuth = new UserAuth({
             USER: newUser._id, // Tham chiếu tới User vừa tạo
             PROVIDER_NAME: 'LOCAL',
-            CREDENTIAL: PASSWORD
+            CREDENTIAL: PASSWORD // Mật khẩu sẽ được hash trong model
         });
         await newAuth.save();
 

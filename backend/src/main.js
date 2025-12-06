@@ -2,6 +2,7 @@ import { dotenv, express } from "./import.js"
 import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import sanitize from "mongo-sanitize"
 
 dotenv.config();
 
@@ -23,31 +24,12 @@ app.use(express.json())
 // Sử dụng cookie parser để đọc cookie từ request
 app.use(cookieParser());
 
-const sanitizeRecursive = (obj) => {
-    // Duyệt qua tất cả các key (khóa) trong đối tượng
-    for (const key in obj) {
-        // 1. Nếu key (khóa) bắt đầu bằng '$' (như $ne)
-        if (key.startsWith('$')) {
-            // Xoá nó đi
-            delete obj[key];
-        }
-        // 2. Nếu giá trị (value) là một đối tượng khác
-        else if (typeof obj[key] === 'object' && obj[key] !== null) {
-            // "Đệ quy": Chạy lại hàm này cho đối tượng con
-            sanitizeRecursive(obj[key]);
-        }
-    }
-};
-
-const sanitizeMiddleware = (req, res, next) => {
-    if (req.body) sanitizeRecursive(req.body);
-    if (req.query) sanitizeRecursive(req.query);
-    if (req.params) sanitizeRecursive(req.params);
-
-    next();
-};
-
-app.use(sanitizeMiddleware);
+app.use((req, res, next) => {
+  req.body = sanitize(req.body);
+  req.query = sanitize(req.query);
+  req.params = sanitize(req.params);
+  next();
+});
 
 import homeRoute from "./routes/homeRouters.js"
 app.use("/home", homeRoute)
