@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "dev": "nodemon -L src/main.js",
+    "dev": "nodemon -L src/server.js",
     "seed": "node src/seed/seed.js",
     "seed:createAdmin": "node src/seed/createAdmin.js",
     "seed:refresh": "node src/seed/seed.js --refresh"

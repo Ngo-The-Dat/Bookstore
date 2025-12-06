@@ -346,6 +346,26 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
     // Keep direct references for readability
     const [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] = products;
 
+    // Map category -> product ids
+    const catProductsMap = {};
+    for (const p of products) {
+        const catId = p.CATEGORY?.toString();
+        if (!catId) continue;
+        if (!catProductsMap[catId]) catProductsMap[catId] = [];
+        catProductsMap[catId].push(p._id);
+    }
+
+    const bulkOps = Object.entries(catProductsMap).map(([catId, prodIds]) => ({
+        updateOne: {
+            filter: { _id: catId },
+            update: { $set: { PRODUCTS: prodIds } }
+        }
+    }));
+
+    if (bulkOps.length) {
+        await categoryModel.bulkWrite(bulkOps);
+    }
+
     // 5) Coupons
     const couponData = [
         {
