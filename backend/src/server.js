@@ -51,9 +51,6 @@ const sanitizeMiddleware = (req, res, next) => {
 
 app.use(sanitizeMiddleware);
 
-import homeRoute from "./routes/homeRouters.js"
-app.use("/home", homeRoute)
-
 import authRoute from "./routes/authRoutes.js"
 app.use("/auth", authRoute)
 
