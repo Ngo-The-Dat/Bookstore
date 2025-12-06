@@ -136,11 +136,6 @@ const Header = () => {
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Giỏ hàng</span>
             </Button>
-            {cartCount > 0 && (
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
-                {cartCount}
-              </span>
-            )}
           </Link>
 
           {/* NÚT MỚI: Thông báo */}
