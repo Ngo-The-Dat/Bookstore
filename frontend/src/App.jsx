@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ChatBubble from "./components/ChatBubble";
+import BookDetail from "./pages/BookDetail";
 
 function App() {
   console.log("Current API URL:", import.meta.env.VITE_API_URL);
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/book/:id" element={<BookDetail />} />
         </Routes>
         <ChatBubble />
       </BrowserRouter>
