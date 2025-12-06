@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { Menu, Search, User, ShoppingCart, Bell, LogOut } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useCart } from "../context/CartContext";
 
 import {
   Popover,
@@ -25,7 +26,7 @@ const categories = [
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount, fetchCart } = useCart();
   const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
@@ -39,29 +40,11 @@ const Header = () => {
       });
       if (res.data && res.data._id) {
         setUser(res.data);
-        fetchCartCount();
+        fetchCart();
       }
     } catch (error) {
       // Not logged in
       setUser(null);
-      setCartCount(0);
-    }
-  };
-
-  const fetchCartCount = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/cart`, {
-        withCredentials: true,
-      });
-      if (res.data && res.data.CART_DETAIL) {
-        const count = res.data.CART_DETAIL.reduce(
-          (acc, item) => acc + item.QUANTITY,
-          0
-        );
-        setCartCount(count);
-      }
-    } catch (error) {
-      console.error("Failed to fetch cart count", error);
     }
   };
 
@@ -69,9 +52,12 @@ const Header = () => {
     try {
       await axios.post(`${API_BASE}/auth/logout`, {}, { withCredentials: true });
       setUser(null);
-      setCartCount(0);
+      // cartCount will be handled by context if we added a clear/reset function, 
+      // but for now we just let it be or force reload.
+      // Actually, let's just reload the page or navigate.
       toast.success("Đăng xuất thành công");
       navigate("/");
+      window.location.reload(); // Simple way to clear state
     } catch (error) {
       toast.error("Đăng xuất thất bại");
     }
@@ -134,6 +120,11 @@ const Header = () => {
           <Link to="/cart" className="relative">
             <Button variant="ghost" className="rounded-full" size="icon">
               <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
               <span className="sr-only">Giỏ hàng</span>
             </Button>
           </Link>
@@ -184,4 +175,3 @@ const Header = () => {
 };
 
 export default Header;
-
