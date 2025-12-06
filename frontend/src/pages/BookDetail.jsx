@@ -17,10 +17,13 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
+import { useCart } from "../context/CartContext";
+
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const { addToCart } = useCart();
 
   const [book, setBook] = useState(null);
   const [images, setImages] = useState([]);
@@ -121,19 +124,7 @@ const BookDetail = () => {
       setShowAuthPopup(true);
       return;
     }
-
-    try {
-      await axios.post(
-        `${API_BASE}/cart/add`,
-        { productId: book._id, quantity: 1 },
-        { withCredentials: true }
-      );
-      toast.success("Đã thêm vào giỏ hàng");
-      // Trigger update for Header (optional, if using event listener)
-      // window.dispatchEvent(new Event("cartUpdated"));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Lỗi khi thêm vào giỏ hàng");
-    }
+    addToCart(book._id, 1);
   };
 
   const handleWriteReview = () => {
