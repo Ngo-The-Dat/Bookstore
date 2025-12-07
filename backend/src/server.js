@@ -25,13 +25,34 @@ app.use(express.json())
 app.use(cookieParser());
 
 // Lọc dữ liệu đầu vào để ngăn chặn tấn công NoSQL Injection
-// Lỗi, đang tìm cách fix
-// app.use((req, res, next) => {
-//   req.body = sanitize(req.body);
-//   req.query = sanitize(req.query);
-//   req.params = sanitize(req.params);
-//   next();
-// });
+app.use((req, res, next) => {
+  // Lọc dữ liệu trong body
+  req.body = sanitize(req.body); 
+
+  // Lọc dữ liệu trong query
+  if (req.query) {
+      const cleanQuery = sanitize(req.query);
+      // Xóa hết key cũ trong req.query
+      for (const key in req.query) {
+          delete req.query[key];
+      }
+      // Copy key từ cleanQuery bỏ vào lại req.query
+      Object.assign(req.query, cleanQuery);
+  }
+
+  // Lọc dữ liệu trong params
+  if (req.params) {
+      const cleanParams = sanitize(req.params);
+      // Xóa hết key cũ trong req.params
+      for (const key in req.params) {
+          delete req.params[key];
+      }
+      // Copy key từ cleanParams bỏ vào lại req.params
+      Object.assign(req.params, cleanParams);
+  }
+
+  next();
+});
 
 import authRoute from "./routes/authRoutes.js"
 app.use("/auth", authRoute)
