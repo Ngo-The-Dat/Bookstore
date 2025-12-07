@@ -24,15 +24,14 @@ app.use(express.json())
 // Sử dụng cookie parser để đọc cookie từ request
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.body = sanitize(req.body);
-  req.query = sanitize(req.query);
-  req.params = sanitize(req.params);
-  next();
-});
-
-import homeRoute from "./routes/homeRouters.js"
-app.use("/home", homeRoute)
+// Lọc dữ liệu đầu vào để ngăn chặn tấn công NoSQL Injection
+// Lỗi, đang tìm cách fix
+// app.use((req, res, next) => {
+//   req.body = sanitize(req.body);
+//   req.query = sanitize(req.query);
+//   req.params = sanitize(req.params);
+//   next();
+// });
 
 import authRoute from "./routes/authRoutes.js"
 app.use("/auth", authRoute)
@@ -60,3 +59,9 @@ app.use("/payments", paymentRoute)
 
 import imageRoute from "./routes/imageRoutes.js"
 app.use("/images", imageRoute)
+
+import AIRoute from "./routes/AIRoutes.js"
+app.use("/AI", AIRoute)
+
+import categoryRoute from "./routes/categoryRoute.js"
+app.use("/categories", categoryRoute)

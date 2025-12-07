@@ -17,7 +17,7 @@ export const createOrder = async (req, res) => {
     const user = await User.findById(userId)
     if (!user) return res.status(404).json({ message: "Không tìm thấy người dùng" })
 
-    const cart = await Cart.findOne({ USER: userId })
+    const cart = await Cart.findOne({ USER: userId }).populate("CART_DETAIL.PRODUCT")
     if (!cart || cart.CART_DETAIL.length === 0) {
       return res.status(400).json({ message: "Giỏ hàng trống" })
     }
@@ -56,7 +56,6 @@ export const createOrder = async (req, res) => {
     // Tạo mảng ITEM từ giỏ hàng
     const items = cart.CART_DETAIL.map(item => ({
       PRODUCT: item.PRODUCT._id,
-      NAME: item.PRODUCT.TENSACH,
       PRICE_AT_PURCHASE: item.PRODUCT.GIABAN,
       QUANTITY: item.QUANTITY,
       TOTAL: item.PRODUCT.GIABAN * item.QUANTITY

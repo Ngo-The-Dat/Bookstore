@@ -7,11 +7,13 @@ const category_schema = new Schema({
         type: String,
         required: true
     },
-    PRODUCT: {
-        type: Schema.Types.ObjectId,
-        ref: 'product'
-    }
-})
+    PRODUCTS: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "product"
+        }
+    ]
+});
 
 const category = model('category', category_schema)
 export default category

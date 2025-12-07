@@ -1,6 +1,6 @@
 import express from 'express'
 import { upload } from '../middlewares/multer.js'
-import { delete_image, get_image, get_image_url, get_multi_image_url, list_images_name, upload_images } from '../controllers/imageController.js'
+import { delete_image, get_image, get_image_url, get_multi_image_url, list_images_name, upload_images, upload_images_card, upload_images_detail } from '../controllers/imageController.js'
 
 const router = express.Router()
 
@@ -10,5 +10,7 @@ router.delete('/', delete_image)
 router.get('/list', list_images_name)
 router.get('/url', get_image_url)
 router.get('/urls', get_multi_image_url)
+router.post('/card', upload.array('image', 10), upload_images_card)
+router.post('/detail', upload.array('image', 10), upload_images_detail)
 
 export default router

@@ -79,7 +79,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
         { TENDM: "Tâm lý" },
         { TENDM: "Ngôn ngữ" },
         { TENDM: "Lịch sử" },
-        { TENDM: "Truyện tranh" }
+        { TENDM: "Truyện tranh" },
+        { TENDM: "Light novel" }
     ];
 
     const categories = await upsertMany(
@@ -174,24 +175,26 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
     const randView = () => Math.floor(Math.random() * 1000); // 0-999
     const baseProducts = [
         {
-            TENSACH: "Dế Mèn Phiêu Lưu Ký",
-            GIABIA: 90000,
-            GIABAN: 75000,
+            TENSACH: "Về Chuyện Tôi Chuyển Sinh Thành Slime - Tập 7",
+            GIABIA: 215000,
+            GIABAN: 193500,
             MOTA: "Tác phẩm thiếu nhi kinh điển",
-            IMG: "https://picsum.photos/seed/book1/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Tô Hoài",
             NXB: "NXB Kim Đồng",
             SOTRANG: 200,
             TONKHO: 50,
             VIEWCOUNT: randView(),
-            CATEGORY: catByName["Thiếu nhi"]._id,
+            CATEGORY: catByName["Light novel"]._id,
         },
         {
             TENSACH: "Sapiens: Lược Sử Loài Người",
             GIABIA: 250000,
             GIABAN: 199000,
             MOTA: "Cuốn sách nổi tiếng về lịch sử nhân loại",
-            IMG: "https://picsum.photos/seed/book2/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Yuval Noah Harari",
             NXB: "NXB Thế Giới",
             SOTRANG: 520,
@@ -204,7 +207,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 220000,
             GIABAN: 175000,
             MOTA: "Kinh điển về tâm lý học nhận thức",
-            IMG: "https://picsum.photos/seed/book3/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Daniel Kahneman",
             NXB: "NXB Lao Động",
             SOTRANG: 600,
@@ -217,7 +221,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 120000,
             GIABAN: 100000,
             MOTA: "Học lập trình C++ từ cơ bản đến nâng cao",
-            IMG: "https://picsum.photos/seed/book4/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Nguyễn Văn A",
             NXB: "NXB Trẻ",
             SOTRANG: 350,
@@ -230,7 +235,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 150000,
             GIABAN: 130000,
             MOTA: "Hướng dẫn Python cho người mới bắt đầu",
-            IMG: "https://picsum.photos/seed/book5/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Trần Thị B",
             NXB: "NXB Giáo Dục",
             SOTRANG: 400,
@@ -243,7 +249,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 200000,
             GIABAN: 180000,
             MOTA: "Học lập trình front-end với ReactJS",
-            IMG: "https://picsum.photos/seed/book6/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Lê Quốc Cường",
             NXB: "NXB Khoa Học",
             SOTRANG: 500,
@@ -256,7 +263,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 180000,
             GIABAN: 160000,
             MOTA: "Tập trung vào thuật toán cơ bản và nâng cao",
-            IMG: "https://picsum.photos/seed/book7/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Phạm Thùy Dung",
             NXB: "NXB Đại Học",
             SOTRANG: 420,
@@ -269,7 +277,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 160000,
             GIABAN: 140000,
             MOTA: "Học JavaScript ES6+ và thực hành dự án web",
-            IMG: "https://picsum.photos/seed/book8/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Đỗ Minh Khang",
             NXB: "NXB Trẻ",
             SOTRANG: 380,
@@ -278,11 +287,12 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             CATEGORY: catByName["Công nghệ thông tin"]._id,
         },
         {
-            TENSACH: "Nhà Giả Kim",
+            TENSACH: "Về Chuyện Tôi Chuyển Sinh Thành Slime - Tập 7",
             GIABIA: 95000,
             GIABAN: 80000,
             MOTA: "Tiểu thuyết triết lý nổi tiếng",
-            IMG: "https://picsum.photos/seed/book9/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Paulo Coelho",
             NXB: "NXB Văn Học",
             SOTRANG: 210,
@@ -295,7 +305,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 120000,
             GIABAN: 100000,
             MOTA: "Kinh điển về nghệ thuật giao tiếp",
-            IMG: "https://picsum.photos/seed/book10/400/600",
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: "Dale Carnegie",
             NXB: "NXB Lao Động",
             SOTRANG: 320,
@@ -314,7 +325,8 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             GIABIA: 100000 + (idx * 5000),
             GIABAN: 90000 + (idx * 4000),
             MOTA: `Sách được tạo tự động #${idx}`,
-            IMG: `https://picsum.photos/seed/autobook${idx}/400/600`,
+            IMG_DETAIL: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+            IMG_CARD: "1_card.jpg",
             TACGIA: `Tác giả ${idx}`,
             NXB: "NXB Tự Động",
             SOTRANG: 250 + idx,
@@ -324,17 +336,7 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
         });
     }
 
-    // function removeVietnameseTones(str) {
-    //     return str
-    //         .normalize("NFD") // tách dấu
-    //         .replace(/[\u0300-\u036f]/g, "") // xóa dấu
-    //         .replace(/đ/g, "d")
-    //         .replace(/Đ/g, "D");
-    // }
     const productPayload = [...baseProducts, ...autoGenerated];
-    // for (const p of productPayload) {
-    //     p.TENSACH_KHONGDAU = removeVietnameseTones(p.TENSACH);
-    // }
 
     const products = await upsertMany(
         productModel,
@@ -343,6 +345,26 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
     );
     // Keep direct references for readability
     const [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] = products;
+
+    // Map category -> product ids
+    const catProductsMap = {};
+    for (const p of products) {
+        const catId = p.CATEGORY?.toString();
+        if (!catId) continue;
+        if (!catProductsMap[catId]) catProductsMap[catId] = [];
+        catProductsMap[catId].push(p._id);
+    }
+
+    const bulkOps = Object.entries(catProductsMap).map(([catId, prodIds]) => ({
+        updateOne: {
+            filter: { _id: catId },
+            update: { $set: { PRODUCTS: prodIds } }
+        }
+    }));
+
+    if (bulkOps.length) {
+        await categoryModel.bulkWrite(bulkOps);
+    }
 
     // 5) Coupons
     const couponData = [
@@ -470,7 +492,6 @@ async function seed({ refresh = false, productTarget = 20, orderTarget = 50 } = 
             const qty = randomInt(1, 3);
             chosen.push({
                 PRODUCT: prod._id,
-                NAME: prod.TENSACH,
                 PRICE_AT_PURCHASE: prod.GIABAN,
                 QUANTITY: qty,
                 TOTAL: prod.GIABAN * qty,
