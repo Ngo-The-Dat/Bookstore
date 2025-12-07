@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 
-// Middleware này kiểm tra xem user đã đăng nhập chưa
+// Middleware này kiểm tra xem user đã đăng nhập chưa và gắn thông tin user vào req.user
 export const protect = async (req, res, next) => {
     let token;
 

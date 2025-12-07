@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, logout } from '../controllers/authController.js'; // (Tên file chứa hàm signup/login)
+import { signup, login, logout } from '../controllers/authController.js';
 import { validate, signupRules } from '../middlewares/validate.js';
 
 const router = express.Router();
