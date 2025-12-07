@@ -1,6 +1,6 @@
 import { get_all_products, add_product, delete_product, update_product, get_all_NXB, get_all_TACGIA, get_product_by_id, get_filter_products, get_bestsellers, get_most_view_books, search_products } from '../controllers/productController.js';
 import express from 'express';
-import { protect, restrictTo } from '../controllers/authMiddleware.js';
+import { protect, restrictTo } from '../middlewares/auth.js';
 
 const router = express.Router();
 //http://localhost:8000/products/get_all_products 

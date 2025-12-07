@@ -1,14 +1,21 @@
 import User from '../models/user.js';
 import UserAuth from '../models/user_authentication.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 export const signup = async (req, res) => {
+    // Start a session for transaction
+    const session = await mongoose.startSession();
     try {
+        // Start transaction
+        session.startTransaction();
         const { HOTEN, PHAI, EMAIL, PASSWORD, SDT, NGAYSN } = req.body;
 
         // 1. Kiểm tra email đã tồn tại trong bảng User chưa
         const existingUser = await User.findOne({ EMAIL: EMAIL });
         if (existingUser) {
+            await session.abortTransaction();
+            session.endSession();
             return res.status(400).json({ message: "Email đã tồn tại." });
         }
 
@@ -17,20 +24,28 @@ export const signup = async (req, res) => {
             HOTEN, PHAI, EMAIL, SDT, NGAYSN
         });
         // LƯU user để lấy được _id
-        await newUser.save();
+        await newUser.save({ session });
 
         // 3. Tạo bảo mật cho user này
         const newAuth = new UserAuth({
             USER: newUser._id, // Tham chiếu tới User vừa tạo
             PROVIDER_NAME: 'LOCAL',
-            CREDENTIAL: PASSWORD
+            CREDENTIAL: PASSWORD // Mật khẩu sẽ được hash trong model
         });
-        await newAuth.save();
+        await newAuth.save({ session });
+
+        // Commit transaction
+        await session.commitTransaction();
+        session.endSession();
 
         res.status(201).json({ message: "Đăng ký thành công!" });
 
     } catch (error) {
+        // Nếu có lỗi, rollback transaction
+        await session.abortTransaction();
+        session.endSession();
         res.status(500).json({ message: "Đã có lỗi xảy ra", error: error.message });
+
     }
 };
 

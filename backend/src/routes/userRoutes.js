@@ -1,6 +1,6 @@
 import express from 'express';
 import { get_all_users, delete_user, update_user, get_current_user } from '../controllers/userController.js';
-import { protect, restrictTo } from '../controllers/authMiddleware.js';
+import { protect, restrictTo } from '../middlewares/auth.js';
 
 const router = express.Router();
 
