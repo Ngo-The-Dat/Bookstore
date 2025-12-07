@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Menu, Search, User, ShoppingCart, Bell, LogOut } from "lucide-react";
-import axios from "axios";
+import axiosClient from "@/api/axiosClient";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
+import { useCategories } from "@/hooks/useCategories";
 
 import {
   Popover,
@@ -13,21 +14,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-// Dữ liệu mẫu cho danh mục
-const categories = [
-  "Văn Học",
-  "Kinh Tế",
-  "Tâm Lý - Kỹ Năng Sống",
-  "Sách Thiếu Nhi",
-  "Tiểu Thuyết",
-  "Sách Nước Ngoài",
-];
-
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { cartCount, fetchCart } = useCart();
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  
+  const { categories, loading: loadingCategories } = useCategories();
 
   useEffect(() => {
     checkLogin();
@@ -35,38 +27,43 @@ const Header = () => {
 
   const checkLogin = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/users/get_current_user`, {
-        withCredentials: true,
-      });
-      if (res.data && res.data._id) {
-        setUser(res.data);
+      const res = await axiosClient.get("/users/get_current_user");
+      if (res && res._id) {
+        setUser(res);
         fetchCart();
       }
     } catch (error) {
-      // Not logged in
       setUser(null);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${API_BASE}/auth/logout`, {}, { withCredentials: true });
+      await axiosClient.post("/auth/logout");
       setUser(null);
-      // cartCount will be handled by context if we added a clear/reset function, 
-      // but for now we just let it be or force reload.
-      // Actually, let's just reload the page or navigate.
       toast.success("Đăng xuất thành công");
       navigate("/");
-      window.location.reload(); // Simple way to clear state
+      window.location.reload();
     } catch (error) {
       toast.error("Đăng xuất thất bại");
+    }
+  };
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      const keyword = e.target.value.trim();
+      if (keyword) {
+        navigate(`/search?q=${encodeURIComponent(keyword)}`);
+      }
+      else {
+        navigate(`/search`);
+      }
     }
   };
 
   return (
     <header className="z-40 w-full bg-white/80 backdrop-blur-sm border-b sticky top-0">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Logo */}
         <Link to="/" className="focus:outline-none focus:ring-0">
           <img
             src="https://via.placeholder.com/120x40.png?text=BookStore"
@@ -75,7 +72,6 @@ const Header = () => {
           />
         </Link>
 
-        {/* Phần giữa: Danh mục và Searchbar */}
         <div className="flex items-center gap-6 flex-1 max-w-3xl mx-4">
           <Popover>
             <PopoverTrigger asChild>
@@ -87,17 +83,23 @@ const Header = () => {
                 <span className="font-medium">Danh mục</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-56 p-2">
+            <PopoverContent className="w-56 p-2 max-h-96 overflow-y-auto">
               <nav className="flex flex-col gap-1">
-                {categories.map((category) => (
-                  <Link
-                    key={category}
-                    to={`/category/${category}`}
-                    className="px-3 py-2 text-sm rounded-md hover:bg-accent"
-                  >
-                    {category}
-                  </Link>
-                ))}
+                {loadingCategories ? (
+                  <div className="px-3 py-2 text-sm text-gray-500">Đang tải...</div>
+                ) : categories.length > 0 ? (
+                  categories.map((category) => (
+                    <Link
+                      key={category._id} 
+                      to={`/category/${category.TENDM}`}
+                      className="px-3 py-2 text-sm rounded-md hover:bg-accent truncate"
+                    >
+                      {category.TENDM}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="px-3 py-2 text-sm text-gray-500">Không có danh mục</div>
+                )}
               </nav>
             </PopoverContent>
           </Popover>
@@ -107,6 +109,7 @@ const Header = () => {
               type="search"
               placeholder="Tìm kiếm sản phẩm..."
               className="pl-10 w-full"
+              onKeyDown={handleSearch} 
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className="h-5 w-5 text-muted-foreground" />
@@ -114,9 +117,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Các nút bên phải: Giỏ hàng, Thông báo, Tài khoản */}
         <div className="flex items-center gap-2">
-          {/* NÚT MỚI: Giỏ hàng */}
           <Link to="/cart" className="relative">
             <Button variant="ghost" className="rounded-full" size="icon">
               <ShoppingCart className="h-5 w-5" />
@@ -129,7 +130,6 @@ const Header = () => {
             </Button>
           </Link>
 
-          {/* NÚT MỚI: Thông báo */}
           <Link to="/notifications">
             <Button variant="ghost" className="rounded-full" size="icon">
               <Bell className="h-5 w-5" />
@@ -137,7 +137,6 @@ const Header = () => {
             </Button>
           </Link>
 
-          {/* Nút Tài khoản */}
           {user ? (
             <Popover>
               <PopoverTrigger asChild>
