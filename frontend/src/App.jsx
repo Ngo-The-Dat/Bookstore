@@ -8,7 +8,9 @@ import ChatBubble from "./components/ChatBubble";
 import BookDetail from "./pages/BookDetail";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import SearchPage from "./pages/SearchPage";
 import { CartProvider } from "./context/CartContext";
+
 
 function App() {
   console.log("Current API URL:", import.meta.env.VITE_API_URL);
@@ -19,6 +21,7 @@ function App() {
           <Toaster richColors position="top-right" />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/cart" element={<CartPage />} />

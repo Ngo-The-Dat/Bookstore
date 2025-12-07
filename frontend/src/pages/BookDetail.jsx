@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -17,12 +16,13 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useCart } from "../context/CartContext";
+import axiosClient from "@/api/axiosClient";
+import { useCart } from "@/context/CartContext";
 
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  
   const { addToCart } = useCart();
 
   const [book, setBook] = useState(null);
@@ -39,18 +39,19 @@ const BookDetail = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/products/detail`, {
+        const data = await axiosClient.get("/products/detail", {
           params: { id }
         });
 
-        setBook(res.data);
+        setBook(data);
 
-        if (Array.isArray(res.data.IMG_DETAIL)) {
-          fetchImages(res.data.IMG_DETAIL);
+        if (Array.isArray(data.IMG_DETAIL)) {
+          fetchImages(data.IMG_DETAIL);
         }
         fetchReviews();
       } catch (err) {
         console.error("Lỗi tải chi tiết sách:", err);
+        setLoading(false);
       }
     };
 
@@ -60,11 +61,9 @@ const BookDetail = () => {
 
   const checkLogin = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/users/get_current_user`, {
-        withCredentials: true,
-      });
-      if (res.data && res.data._id) {
-        setUser(res.data);
+      const data = await axiosClient.get("/users/get_current_user");
+      if (data && data._id) {
+        setUser(data);
       }
     } catch (error) {
       setUser(null);
@@ -76,13 +75,11 @@ const BookDetail = () => {
       const urls = [];
 
       for (const name of imgNames) {
-        const res = await axios.get(`${API_BASE}/images/urls`, {
+        const data = await axiosClient.get("/images/urls", {
           params: { names: name }
         });
 
-        const data = res.data;
         let url = null;
-
         if (typeof data === "string") url = data;
         else if (Array.isArray(data)) url = data[0];
         else if (typeof data === "object" && data !== null) {
@@ -103,23 +100,23 @@ const BookDetail = () => {
 
       setImages(urls);
       setMainImage(urls[0] || null);
-      setLoading(false);
     } catch (err) {
       console.error("Lỗi tải ảnh:", err);
+    } finally {
       setLoading(false);
     }
   };
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/reviews/product/${id}`);
-      setReviews(res.data);
+      const data = await axiosClient.get(`/reviews/product/${id}`);
+      setReviews(data);
     } catch (err) {
       console.error("Lỗi tải đánh giá:", err);
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!user) {
       setShowAuthPopup(true);
       return;
@@ -142,31 +139,20 @@ const BookDetail = () => {
     }
 
     try {
-      // Assuming API endpoint for adding review
-      // Check reviewRoutes.js for exact endpoint. Usually POST /reviews
-      // Based on file list, reviewRoutes.js exists.
-      // I'll assume POST /reviews/add or similar.
-      // Let's try POST /reviews first.
-      await axios.post(
-        `${API_BASE}/reviews`,
-        {
-          PRODUCT: book._id,
-          RATING: reviewRating,
-          COMMENT: reviewComment,
-          USER: user._id,
-        },
-        { withCredentials: true }
-      );
+      await axiosClient.post("/reviews", {
+        PRODUCT: book._id,
+        RATING: reviewRating,
+        COMMENT: reviewComment,
+        USER: user._id,
+      });
+      
       toast.success("Đã gửi đánh giá");
       setShowReviewForm(false);
       setReviewComment("");
       fetchReviews();
     } catch (error) {
-      // If 404, maybe route is different.
-      // But for now I'll assume standard REST.
-      // Actually, I should have checked reviewRoutes.js.
-      // But I'll proceed with this assumption and fix if needed.
-      toast.error("Gửi đánh giá thất bại (API chưa kiểm tra)");
+      const msg = error.response?.data?.message || "Gửi đánh giá thất bại";
+      toast.error(msg);
     }
   };
 
@@ -184,28 +170,20 @@ const BookDetail = () => {
 
   return (
     <div className="flex flex-col min-h-screen relative bg-[#f9fafb] overflow-y-auto scrollbar-hide">
-      {/* === BACKGROUND GRID === */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `
-            linear-gradient(to right, #d1d5db 1px, transparent 1px),
-            linear-gradient(to bottom, #d1d5db 1px, transparent 1px)
-            `,
+          backgroundImage: `linear-gradient(to right, #d1d5db 1px, transparent 1px), linear-gradient(to bottom, #d1d5db 1px, transparent 1px)`,
           backgroundSize: "32px 32px",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
-          maskImage:
-            "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
+          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
+          maskImage: "radial-gradient(ellipse 80% 80% at 100% 100%, #000 50%, transparent 90%)",
         }}
       ></div>
 
-      {/* Nội dung */}
       <div className="relative z-10">
         <Header />
 
         <div className="container mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
-
           {/* LEFT — Ảnh sách */}
           <div>
             <div className="w-full h-[500px] bg-white border flex items-center justify-center overflow-hidden rounded-lg">
@@ -220,13 +198,11 @@ const BookDetail = () => {
               )}
             </div>
 
-            {/* Carousel */}
             <div className="flex gap-4 mt-5 overflow-x-auto scrollbar-hide py-2">
               {images.map((img, index) => (
                 <div
                   key={index}
-                  className={`border rounded-md w-24 h-32 flex-shrink-0 overflow-hidden cursor-pointer flex items-center justify-center transition-all duration-200 ${mainImage === img ? "border-red-500 scale-105" : "border-gray-300"
-                    }`}
+                  className={`border rounded-md w-24 h-32 flex-shrink-0 overflow-hidden cursor-pointer flex items-center justify-center transition-all duration-200 ${mainImage === img ? "border-red-500 scale-105" : "border-gray-300"}`}
                   onClick={() => setMainImage(img)}
                 >
                   <img
@@ -237,7 +213,7 @@ const BookDetail = () => {
                 </div>
               ))}
             </div>
-            {/* Buttons Thêm vào giỏ hàng & Mua ngay */}
+            
             <div className="flex gap-4 mt-5">
               <button
                 onClick={handleAddToCart}
@@ -247,7 +223,7 @@ const BookDetail = () => {
                 Thêm vào giỏ hàng
               </button>
               <button
-                onClick={handleAddToCart} // For now Buy Now also adds to cart
+                onClick={handleAddToCart}
                 className="flex-1 py-3 rounded-md text-white font-semibold transition-colors duration-200 hover:opacity-90"
                 style={{ backgroundColor: "hsl(263 69% 50%)" }}
               >
@@ -259,11 +235,9 @@ const BookDetail = () => {
           {/* RIGHT — Thông tin sách */}
           <div className="space-y-4">
             <h1 className="text-4xl font-bold text-gray-900">{book.TENSACH}</h1>
-
             <p className="text-gray-700 text-lg">
               Tác giả: <b>{book.TACGIA}</b>
             </p>
-
             <div className="text-xl">
               <span className="text-red-600 font-bold text-3xl">
                 {book.GIABAN.toLocaleString()} đ
@@ -272,12 +246,10 @@ const BookDetail = () => {
                 {book.GIABIA.toLocaleString()} đ
               </span>
             </div>
-
             <div className="border-t pt-4 text-gray-700">
               <h2 className="font-bold text-lg mb-2">Mô tả sản phẩm</h2>
               <p>{book.MOTA}</p>
             </div>
-
             <div className="border-t pt-4 text-gray-700">
               <h2 className="font-bold text-lg mb-2">Thông tin chi tiết</h2>
               <ul className="space-y-1">
@@ -288,15 +260,16 @@ const BookDetail = () => {
             </div>
           </div>
         </div>
-        {/* === FULL-WIDTH REVIEW SECTION === */}
+
+        {/* REVIEW SECTION */}
         <div className="w-full px-6 py-10 bg-white/60 backdrop-blur-md border-t mt-5">
           <div className="max-w-[1200px] mx-auto">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Đánh giá sản phẩm
             </h2>
 
+            {/* Thống kê đánh giá */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center border-b pb-6">
-              {/* CỘT TRÁI: ĐIỂM TRUNG BÌNH */}
               <div className="flex flex-col items-center md:items-start text-center md:text-left">
                 <p className="text-5xl font-bold text-gray-800">
                   {reviews.length > 0
@@ -318,9 +291,8 @@ const BookDetail = () => {
                 </div>
                 <p className="text-gray-500">({reviews.length} đánh giá)</p>
               </div>
-
-              {/* CỘT PHẢI: THANH TIẾN TRÌNH */}
               <div className="col-span-2 w-full">
+                {/* Progress bars - Giữ nguyên code cũ */}
                 <div className="space-y-1">
                   {[5, 4, 3, 2, 1].map((star) => {
                     const count = reviews.filter(r => r.RATING === star).length;
@@ -329,10 +301,7 @@ const BookDetail = () => {
                       <div key={star} className="flex items-center gap-2 text-sm">
                         <span className="text-gray-600">{star} sao</span>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-yellow-400 h-2 rounded-full"
-                            style={{ width: `${percentage}%` }}
-                          ></div>
+                          <div className="bg-yellow-400 h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
                         </div>
                         <span className="text-gray-600 w-10 text-right">{Math.round(percentage)}%</span>
                       </div>
@@ -342,7 +311,6 @@ const BookDetail = () => {
               </div>
             </div>
 
-            {/* NÚT VIẾT ĐÁNH GIÁ */}
             <div className="flex justify-center md:justify-end my-6">
               <button
                 type="button"
@@ -353,7 +321,6 @@ const BookDetail = () => {
               </button>
             </div>
 
-            {/* FORM VIẾT ĐÁNH GIÁ */}
             {showReviewForm && (
               <div className="mb-8 p-6 bg-white rounded-lg shadow-sm border">
                 <h3 className="text-lg font-semibold mb-4">Viết đánh giá của bạn</h3>
@@ -385,12 +352,10 @@ const BookDetail = () => {
               </div>
             )}
 
-            {/* DANH SÁCH CÁC REVIEW */}
             <div className="space-y-6">
               {!loading && reviews.length === 0 && (
                 <p className="text-gray-500 text-center py-4">Chưa có đánh giá nào cho sản phẩm này.</p>
               )}
-
               {!loading && reviews.length > 0 && (
                 reviews.map((review) => (
                   <div key={review._id} className="border-b pb-4 last:border-b-0">

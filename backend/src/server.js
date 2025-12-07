@@ -2,7 +2,7 @@ import { dotenv, express } from "./import.js"
 import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import bodyParser from "body-parser";
+import sanitize from "mongo-sanitize"
 
 dotenv.config();
 
@@ -16,7 +16,6 @@ connectDB().then(() => {
     })
 })
 
-app.use(bodyParser.json())
 // cho phép frontend kết nối với database
 app.use(cors())
 // app.use(cors({origin: ["http://localhost:8000", "http://localhost:8002"]}))
@@ -25,31 +24,35 @@ app.use(express.json())
 // Sử dụng cookie parser để đọc cookie từ request
 app.use(cookieParser());
 
-const sanitizeRecursive = (obj) => {
-    // Duyệt qua tất cả các key (khóa) trong đối tượng
-    for (const key in obj) {
-        // 1. Nếu key (khóa) bắt đầu bằng '$' (như $ne)
-        if (key.startsWith('$')) {
-            // Xoá nó đi
-            delete obj[key];
-        }
-        // 2. Nếu giá trị (value) là một đối tượng khác
-        else if (typeof obj[key] === 'object' && obj[key] !== null) {
-            // "Đệ quy": Chạy lại hàm này cho đối tượng con
-            sanitizeRecursive(obj[key]);
-        }
-    }
-};
+// Lọc dữ liệu đầu vào để ngăn chặn tấn công NoSQL Injection
+app.use((req, res, next) => {
+  // Lọc dữ liệu trong body
+  req.body = sanitize(req.body); 
 
-const sanitizeMiddleware = (req, res, next) => {
-    if (req.body) sanitizeRecursive(req.body);
-    if (req.query) sanitizeRecursive(req.query);
-    if (req.params) sanitizeRecursive(req.params);
+  // Lọc dữ liệu trong query
+  if (req.query) {
+      const cleanQuery = sanitize(req.query);
+      // Xóa hết key cũ trong req.query
+      for (const key in req.query) {
+          delete req.query[key];
+      }
+      // Copy key từ cleanQuery bỏ vào lại req.query
+      Object.assign(req.query, cleanQuery);
+  }
 
-    next();
-};
+  // Lọc dữ liệu trong params
+  if (req.params) {
+      const cleanParams = sanitize(req.params);
+      // Xóa hết key cũ trong req.params
+      for (const key in req.params) {
+          delete req.params[key];
+      }
+      // Copy key từ cleanParams bỏ vào lại req.params
+      Object.assign(req.params, cleanParams);
+  }
 
-app.use(sanitizeMiddleware);
+  next();
+});
 
 import authRoute from "./routes/authRoutes.js"
 app.use("/auth", authRoute)
