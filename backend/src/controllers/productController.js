@@ -29,7 +29,7 @@ export const add_product = async (req, res) => {
 
 export const delete_product = async (req, res) => {
     try {
-        const productId = req.params.id;
+        const productId = req.query.id;
         await product_service.delete_product(productId);
         res.status(200).json({ message: "Xóa sản phẩm thành công" });
     } catch (error) {
