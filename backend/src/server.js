@@ -2,7 +2,6 @@ import { dotenv, express } from "./import.js"
 import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import sanitize from "mongo-sanitize"
 
 dotenv.config();
 
@@ -21,38 +20,12 @@ app.use(cors())
 // app.use(cors({origin: ["http://localhost:8000", "http://localhost:8002"]}))
 app.use(express.json())
 
+// Bảo mật hệ thống
+import { securityMiddleware } from "./middlewares/security.js"
+securityMiddleware(app)
+
 // Sử dụng cookie parser để đọc cookie từ request
 app.use(cookieParser());
-
-// Lọc dữ liệu đầu vào để ngăn chặn tấn công NoSQL Injection
-app.use((req, res, next) => {
-  // Lọc dữ liệu trong body
-  req.body = sanitize(req.body); 
-
-  // Lọc dữ liệu trong query
-  if (req.query) {
-      const cleanQuery = sanitize(req.query);
-      // Xóa hết key cũ trong req.query
-      for (const key in req.query) {
-          delete req.query[key];
-      }
-      // Copy key từ cleanQuery bỏ vào lại req.query
-      Object.assign(req.query, cleanQuery);
-  }
-
-  // Lọc dữ liệu trong params
-  if (req.params) {
-      const cleanParams = sanitize(req.params);
-      // Xóa hết key cũ trong req.params
-      for (const key in req.params) {
-          delete req.params[key];
-      }
-      // Copy key từ cleanParams bỏ vào lại req.params
-      Object.assign(req.params, cleanParams);
-  }
-
-  next();
-});
 
 import authRoute from "./routes/authRoutes.js"
 app.use("/auth", authRoute)

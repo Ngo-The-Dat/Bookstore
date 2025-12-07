@@ -1,9 +1,10 @@
 import express from 'express';
 import { signup, login, logout } from '../controllers/authController.js'; // (Tên file chứa hàm signup/login)
+import { validate, signupRules } from '../middlewares/validate.js';
 
 const router = express.Router();
 
-router.post('/signup', signup);
+router.post('/signup', validate(signupRules), signup);
 router.post('/login', login);
 router.post('/logout', logout);
 

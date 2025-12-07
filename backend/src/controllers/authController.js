@@ -76,6 +76,7 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Email hoặc mật khẩu không đúng." });
         }
 
+        // 4. Tạo JWT
         const payload = { id: user._id };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
 

@@ -1,9 +1,7 @@
-// security.js
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import xss from "xss-clean";
 import hpp from "hpp";
-import mongoSanitize from "express-mongo-sanitize";
+import sanitize from "mongo-sanitize"
 
 export const securityMiddleware = (app) => {
     // HTTP headers
@@ -17,11 +15,35 @@ export const securityMiddleware = (app) => {
         legacyHeaders: false
     }));
 
-    // Chặn NoSQL injection
-    app.use(mongoSanitize());
+    // NoSQL injection
+    app.use((req, res, next) => {
+    // Lọc dữ liệu trong body
+    req.body = sanitize(req.body); 
 
-    // Chặn XSS
-    app.use(xss());
+    // Lọc dữ liệu trong query
+    if (req.query) {
+        const cleanQuery = sanitize(req.query);
+        // Xóa hết key cũ trong req.query
+        for (const key in req.query) {
+            delete req.query[key];
+        }
+        // Copy key từ cleanQuery bỏ vào lại req.query
+        Object.assign(req.query, cleanQuery);
+    }
+
+    // Lọc dữ liệu trong params
+    if (req.params) {
+        const cleanParams = sanitize(req.params);
+        // Xóa hết key cũ trong req.params
+        for (const key in req.params) {
+            delete req.params[key];
+        }
+        // Copy key từ cleanParams bỏ vào lại req.params
+        Object.assign(req.params, cleanParams);
+    }
+
+    next();
+    });
 
     // Chặn HTTP parameter pollution
     app.use(hpp());

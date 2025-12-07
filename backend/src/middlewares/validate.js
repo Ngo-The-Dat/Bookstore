@@ -1,4 +1,3 @@
-// validate.js
 import { body, validationResult } from "express-validator";
 
 // CHECK RESULT
@@ -19,13 +18,10 @@ export const validate = (rules) => {
 
 // RULES — signup
 export const signupRules = [
-    body("email")
+    body("EMAIL")
         .isEmail().withMessage("Invalid email")
         .normalizeEmail(),
 
-    body("password")
-        .isLength({ min: 6 }).withMessage("Password too short"),
-
-    body("name")
-        .notEmpty().withMessage("Name is required")
+    body("PASSWORD")
+        .isLength({ min: 8 }).withMessage("Password too short")
 ];
