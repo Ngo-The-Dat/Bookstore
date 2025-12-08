@@ -9,6 +9,8 @@ import BookDetail from "./pages/BookDetail";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import SearchPage from "./pages/SearchPage";
+import ProfilePage from "./pages/ProfilePage";
+import CategoryPage from "./pages/CategoryPage";
 import { CartProvider } from "./context/CartContext";
 
 
@@ -26,8 +28,10 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/book/:id" element={<BookDetail />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatBubble />
         </BrowserRouter>
