@@ -15,14 +15,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 
 import axiosClient from "@/api/axiosClient";
 import { useCart } from "@/context/CartContext";
+import { categoryService } from "@/services/categoryService";
 
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const { addToCart } = useCart();
 
   const [book, setBook] = useState(null);
@@ -35,6 +37,7 @@ const BookDetail = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
+  const [category, setCategory] = useState(null);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -49,6 +52,11 @@ const BookDetail = () => {
           fetchImages(data.IMG_DETAIL);
         }
         fetchReviews();
+
+        // Fetch category info
+        if (data.CATEGORY) {
+          fetchCategory(data.CATEGORY);
+        }
       } catch (err) {
         console.error("Lỗi tải chi tiết sách:", err);
         setLoading(false);
@@ -116,6 +124,19 @@ const BookDetail = () => {
     }
   };
 
+  const fetchCategory = async (categoryId) => {
+    try {
+      const categories = await categoryService.getAll();
+      const list = Array.isArray(categories) ? categories : (categories.categories || []);
+      const cat = list.find(c => c._id === categoryId);
+      if (cat) {
+        setCategory(cat);
+      }
+    } catch (err) {
+      console.error("Lỗi tải danh mục:", err);
+    }
+  };
+
   const handleAddToCart = () => {
     if (!user) {
       setShowAuthPopup(true);
@@ -145,7 +166,7 @@ const BookDetail = () => {
         COMMENT: reviewComment,
         USER: user._id,
       });
-      
+
       toast.success("Đã gửi đánh giá");
       setShowReviewForm(false);
       setReviewComment("");
@@ -213,7 +234,7 @@ const BookDetail = () => {
                 </div>
               ))}
             </div>
-            
+
             <div className="flex gap-4 mt-5">
               <button
                 onClick={handleAddToCart}
@@ -256,6 +277,19 @@ const BookDetail = () => {
                 <li><b>Nhà xuất bản:</b> {book.NXB}</li>
                 <li><b>Số trang:</b> {book.SOTRANG}</li>
                 <li><b>Tồn kho:</b> {book.TONKHO}</li>
+                {category && (
+                  <li className="flex items-center gap-2">
+                    <b>Danh mục:</b>
+                    <Link to={`/category/${encodeURIComponent(category.TENDM)}`}>
+                      <Badge
+                        variant="secondary"
+                        className="cursor-pointer hover:bg-primary hover:text-white transition-colors"
+                      >
+                        {category.TENDM}
+                      </Badge>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
