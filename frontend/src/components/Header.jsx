@@ -18,7 +18,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { cartCount, fetchCart } = useCart();
-  
+
   const { categories, loading: loadingCategories } = useCategories();
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const Header = () => {
                 ) : categories.length > 0 ? (
                   categories.map((category) => (
                     <Link
-                      key={category._id} 
+                      key={category._id}
                       to={`/category/${category.TENDM}`}
                       className="px-3 py-2 text-sm rounded-md hover:bg-accent truncate"
                     >
@@ -109,7 +109,7 @@ const Header = () => {
               type="search"
               placeholder="Tìm kiếm sản phẩm..."
               className="pl-10 w-full"
-              onKeyDown={handleSearch} 
+              onKeyDown={handleSearch}
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className="h-5 w-5 text-muted-foreground" />
@@ -149,6 +149,15 @@ const Header = () => {
                 <div className="px-2 py-1.5 text-sm font-semibold border-b mb-1">
                   {user.HOTEN || user.EMAIL}
                 </div>
+                <Link to="/profile" className="block">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    Hồ sơ
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
