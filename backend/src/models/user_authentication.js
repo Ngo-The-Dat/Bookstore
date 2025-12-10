@@ -51,8 +51,8 @@ const user_authentication_schema = new Schema({
 
 //Hash pass trước khu lưu
 user_authentication_schema.pre("save", async function(next) {
-    // Chỉ hash nếu PROVIDER là 'LOCAL' và CREDENTIAL bị thay đổi
-    if (this.PROVIDER_NAME !== 'LOCAL' || !this.isModified("CREDENTIAL")) {
+    // Chỉ hash nếu PROVIDER là 'LOCAL'
+    if (this.PROVIDER_NAME !== 'LOCAL') {
         return next();
     }
 

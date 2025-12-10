@@ -39,13 +39,13 @@ export const get_current_user = async (req, res) => {
 };
 
 // 4. UPDATE
-export const update_user = async (req, res) => {
+export const update_current_user = async (req, res) => {
     try {
-        const userId = req.params.id;
+        const userId = req.user._id;
         const updateData = req.body;
         
         const updatedUser = await userService.update_user_by_id(userId, updateData);
-        res.status(200).json(updatedUser);
+        res.status(200).json({ message: "Cập nhật thông tin cá nhân thành công", user: updatedUser });
     } catch (error) {
         if (error.message === "USER_NOT_FOUND") {
             return res.status(404).json({ message: "Người dùng không tồn tại để cập nhật" });
@@ -65,5 +65,20 @@ export const delete_user = async (req, res) => {
             return res.status(404).json({ message: "Người dùng không tồn tại để xóa" });
         }
         res.status(500).json({ message: "Lỗi khi xóa", error: error.message });
+    }
+};
+
+// 6. UPDATE ROLE (Admin cập nhật vai trò người dùng khác)
+export const update_user_role = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { role } = req.body;
+        const updatedUser = await userService.update_user_by_id(userId, { role });
+        res.status(200).json({ message: "Cập nhật vai trò người dùng thành công", user: updatedUser });
+    } catch (error) {
+        if (error.message === "USER_NOT_FOUND") {
+            return res.status(404).json({ message: "Người dùng không tồn tại để cập nhật vai trò" });
+        }
+        res.status(500).json({ message: "Lỗi khi cập nhật vai trò", error: error.message });
     }
 };
