@@ -1,13 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import axiosClient from "@/api/axiosClient";
+
+const CartItemImage = ({ imageName, altText }) => {
+  const [imageUrl, setImageUrl] = useState("https://via.placeholder.com/150?text=Loading...");
+
+  useEffect(() => {
+    if (!imageName) {
+        setImageUrl("https://via.placeholder.com/150?text=No+Image");
+        return;
+    }
+
+    const fetchImage = async () => {
+      try {
+        const data = await axiosClient.get("/images/urls", {
+          params: { names: imageName }
+        });
+
+        let url = null;
+        if (typeof data === "string") url = data;
+        else if (Array.isArray(data)) url = data[0];
+        else if (typeof data === "object" && data !== null) {
+          url =
+            data[imageName] ||
+            data.url ||
+            (Array.isArray(data.urls) && data.urls[0]) ||
+            Object.values(data).find(v => typeof v === "string" && v.startsWith("http")) ||
+            null;
+        }
+
+        if (url) setImageUrl(url);
+        else setImageUrl("https://via.placeholder.com/150?text=Error");
+      } catch (error) {
+        console.error("Lỗi ảnh:", error);
+        setImageUrl("https://via.placeholder.com/150?text=Error");
+      }
+    };
+
+    fetchImage();
+  }, [imageName]);
+
+  return (
+    <img
+      src={imageUrl}
+      alt={altText}
+      className="w-full h-full object-cover"
+      onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Error"; }}
+    />
+  );
+};
 
 const CartPage = () => {
-    const { cart, isLoading, updateQuantity, removeFromCart, cartTotal } = useCart();
+    const { cartItems, isLoading, updateQuantity, removeFromCart, cartTotal } = useCart();
 
     if (isLoading) {
         return (
@@ -20,8 +69,6 @@ const CartPage = () => {
             </div>
         );
     }
-
-    const cartItems = cart?.CART_DETAIL || [];
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
@@ -55,17 +102,12 @@ const CartPage = () => {
                         <div className="lg:col-span-2 space-y-4">
                             {cartItems.map((item) => (
                                 <div key={item._id} className="bg-white rounded-lg shadow-sm p-4 flex gap-4 transition-all hover:shadow-md">
-                                    {/* Product Image - Placeholder if not available */}
-                                    <div className="w-24 h-32 bg-gray-200 rounded-md flex-shrink-0 overflow-hidden">
-                                        {/* In a real app, we would fetch the image URL properly. 
-                         Assuming item.PRODUCT has IMG_DETAIL or similar, but for list view we might need to fetch or it's populated.
-                         The cart controller populates CART_DETAIL.PRODUCT.
-                         Let's assume we can get a thumbnail or just show a placeholder.
-                     */}
-                                        <img
-                                            src="https://via.placeholder.com/150"
-                                            alt={item.PRODUCT?.TENSACH}
-                                            className="w-full h-full object-cover"
+                                    {/* Product Image Wrapper */}
+                                    <div className="w-24 h-32 bg-gray-200 rounded-md flex-shrink-0 overflow-hidden border">
+                                        {/* Sử dụng Component CartItemImage thay vì thẻ img thường */}
+                                        <CartItemImage 
+                                            imageName={item.PRODUCT?.IMG_CARD} 
+                                            altText={item.PRODUCT?.TENSACH} 
                                         />
                                     </div>
 
@@ -89,7 +131,7 @@ const CartPage = () => {
                                                 >
                                                     <Minus className="w-4 h-4" />
                                                 </button>
-                                                <span className="px-4 font-medium text-gray-700">{item.QUANTITY}</span>
+                                                <span className="px-4 font-medium text-gray-700 min-w-[2rem] text-center">{item.QUANTITY}</span>
                                                 <button
                                                     onClick={() => updateQuantity(item.PRODUCT._id, item.QUANTITY + 1)}
                                                     className="p-2 hover:bg-gray-100 transition-colors"

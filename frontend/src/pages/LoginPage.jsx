@@ -1,51 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import axios from "axios";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
+import { useLogin } from "@/hooks/useLogin"; 
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      toast.error("Vui lòng nhập đầy đủ email và mật khẩu");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await axios.post("http://localhost:8000/auth/login", {
-        email,
-        password,
-      });
-
-      // Tùy theo API trả về gì, có thể lưu token ở đây
-      // ví dụ: localStorage.setItem("token", res.data.token);
-      toast.success("Đăng nhập thành công");
-
-      // Điều hướng về trang chủ
-      navigate("/");
-    } catch (error) {
-      const msg =
-        error?.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại.";
-      toast.error(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { formData, loading, handleChange, handleLogin } = useLogin();
 
   return (
     <div className="flex flex-col min-h-screen relative bg-[#f9fafb]">
-      {/* Background giống HomePage */}
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -72,7 +37,7 @@ const LoginPage = () => {
             Chào mừng bạn quay lại Bookstore
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label
                 htmlFor="email"
@@ -84,8 +49,8 @@ const LoginPage = () => {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email} 
+                onChange={handleChange}
                 autoComplete="email"
               />
             </div>
@@ -101,8 +66,8 @@ const LoginPage = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password} // Dùng state từ hook
+                onChange={handleChange}   // Dùng hàm từ hook
                 autoComplete="current-password"
               />
             </div>
