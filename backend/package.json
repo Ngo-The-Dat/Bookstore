@@ -7,7 +7,8 @@
     "dev": "nodemon -L src/server.js",
     "seed": "node src/seed/seed.js",
     "seed:createAdmin": "node src/seed/createAdmin.js",
-    "seed:refresh": "node src/seed/seed.js --refresh"
+    "seed:refresh": "node src/seed/seed.js --refresh",
+    "seed:manageAccounts": "node src/seed/manageAccountUser.js"
   },
   "type": "module",
   "keywords": [],
@@ -33,8 +34,8 @@
     "mongoose": "^8.19.2",
     "multer": "^2.0.2",
     "passport": "^0.7.0",
-    "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
     "sharp": "^0.34.5",
     "xss-clean": "^0.1.4"
   },

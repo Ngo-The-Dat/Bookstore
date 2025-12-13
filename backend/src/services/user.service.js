@@ -1,4 +1,5 @@
 import User from '../models/user.js';
+import UserAuth from '../models/user_authentication.js';
 
 // Lấy danh sách user
 export const get_all_users = async () => {
@@ -31,9 +32,15 @@ export const update_user_by_id = async (userId, updateData) => {
 
 // Xóa User
 export const delete_user_by_id = async (userId) => {
+
+    const deletedUserAuths = await UserAuth.deleteMany({ USER: userId });
+    if (!deletedUserAuths.deletedCount) {
+        throw new Error("USER_AUTH_NOT_FOUND");
+    }
+
     const deletedUser = await User.findByIdAndDelete(userId);
     if (!deletedUser) {
         throw new Error("USER_NOT_FOUND");
     }
-    return deletedUser;
+
 };

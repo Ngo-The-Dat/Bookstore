@@ -1,6 +1,7 @@
 import express from 'express';
-import { signup, login, logout } from '../controllers/authController.js';
+import { signup, logout, authResponse } from '../controllers/authController.js';
 import { validate, signupRules } from '../middlewares/validate.js';
+import passport from '../config/passport.js';
 
 const router = express.Router();
 
@@ -8,9 +9,23 @@ const router = express.Router();
 router.post('/signup', validate(signupRules), signup);
 
 // Request: Body { EMAIL, PASSWORD }
-router.post('/login', login);
+// router.post('/login', login);
 
 // Không cần gì hết
 router.post('/logout', logout);
+
+// 1. LOGIN LOCAL
+// session: false vì ta dùng JWT, không dùng cookie session
+router.post('/login', passport.authenticate('local', { session: false }), authResponse);
+
+// 2. LOGIN GOOGLE
+// Bước 2a: Client bấm vào link này -> Chuyển hướng sang Google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Bước 2b: Google gọi lại link này (Callback)
+router.get('/google/callback', 
+    passport.authenticate('google', { session: false, failureRedirect: '/login-fail' }),
+    authResponse // Nếu thành công -> trả về JSON Token
+);
 
 export default router;

@@ -61,8 +61,11 @@ export const delete_user = async (req, res) => {
         await userService.delete_user_by_id(userId);
         res.status(200).json({ message: "Người dùng đã được xóa thành công" });
     } catch (error) {
-         if (error.message === "USER_NOT_FOUND") {
+        if (error.message === "USER_NOT_FOUND") {
             return res.status(404).json({ message: "Người dùng không tồn tại để xóa" });
+        }
+        if (error.message === "USER_AUTH_NOT_FOUND") {
+            return res.status(404).json({ message: "Thông tin xác thực người dùng không tồn tại để xóa" });
         }
         res.status(500).json({ message: "Lỗi khi xóa", error: error.message });
     }

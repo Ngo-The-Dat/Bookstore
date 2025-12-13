@@ -10,24 +10,24 @@ const user_schema = new Schema({
     },
     PHAI: {
         type: String,
-        required: true,
+        // required: true,
         enum: ['Nam', 'Nữ']
     },
     EMAIL: {
         type: String,
         required: [true, "Vui lòng nhập email"],
-        unique: [true, "Email không được trùng"], // không được trùng trong database
+        // unique: [true, "Email không được trùng"], // không được trùng trong database
         match: [/^\S+@\S+\.\S+$/, 'Email không hợp lệ!'],
         lowercase: true
     },
     SDT: {
         type: String,
-        required: [true, "Vui lòng nhập số điện thoại"],
+        // required: [true, "Vui lòng nhập số điện thoại"],
         match: [/^[0-9]{10}$/, 'Số điện thoại không hợp lệ']
     },
     NGAYSN: {
         type: Date, //yy/mm/dd
-        required: true
+        // required: true
     },
     ROLE: {
         type: String,

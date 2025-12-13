@@ -3,8 +3,6 @@ import { connectDB, closeDBConnection } from "../config/db.js";
 import User from '../models/user.js';
 import UserAuth from '../models/user_authentication.js';
 
-dotenv.config();
-
 const createAdmin = async () => {
     try {
         await connectDB();

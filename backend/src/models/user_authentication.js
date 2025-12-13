@@ -18,14 +18,14 @@ const user_authentication_schema = new Schema({
     CREDENTIAL: {
         type: String,
         // Vẫn yêu cầu nếu là 'LOCAL'
-        required: function() { return this.PROVIDER_NAME === 'LOCAL'; },
+        required: function () { return this.PROVIDER_NAME === 'LOCAL'; },
         select: false,
-        
+
         // --- ĐÂY LÀ PHẦN BẠN CẦN THÊM VÀO ---
         validate: [
             {
                 // Validator 1: Kiểm tra độ dài
-                validator: function(value) {
+                validator: function (value) {
                     // Nếu là Google/Facebook, bỏ qua
                     if (this.PROVIDER_NAME !== 'LOCAL') return true;
                     // Nếu là LOCAL, kiểm tra
@@ -35,7 +35,7 @@ const user_authentication_schema = new Schema({
             },
             {
                 // Validator 2: Kiểm tra Regex
-                validator: function(value) {
+                validator: function (value) {
                     // Nếu là Google/Facebook, bỏ qua
                     if (this.PROVIDER_NAME !== 'LOCAL') return true;
                     // Nếu là LOCAL, kiểm tra
@@ -50,7 +50,7 @@ const user_authentication_schema = new Schema({
 });
 
 //Hash pass trước khu lưu
-user_authentication_schema.pre("save", async function(next) {
+user_authentication_schema.pre("save", async function (next) {
     // Chỉ hash nếu PROVIDER là 'LOCAL'
     if (this.PROVIDER_NAME !== 'LOCAL') {
         return next();
@@ -65,7 +65,7 @@ user_authentication_schema.pre("save", async function(next) {
     }
 });
 
-user_authentication_schema.methods.comparePassword = async function(candidatePassword) {
+user_authentication_schema.methods.comparePassword = async function (candidatePassword) {
     // Tìm 1 id trong DB ứng với id hiện tại và lấy CREDENTIAL
     const auth = await this.constructor.findOne({ _id: this._id }).select('+CREDENTIAL');
     if (!auth) return false;
