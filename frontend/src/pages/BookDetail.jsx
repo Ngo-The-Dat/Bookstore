@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import axiosClient from "@/api/axiosClient";
 import { useCart } from "@/context/CartContext";
 import { categoryService } from "@/services/categoryService";
+import { reviewService } from "@/services/reviewService";
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -38,6 +39,7 @@ const BookDetail = () => {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [category, setCategory] = useState(null);
+  const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -52,6 +54,7 @@ const BookDetail = () => {
           fetchImages(data.IMG_DETAIL);
         }
         fetchReviews();
+        fetchAverageRating();
 
         // Fetch category info
         if (data.CATEGORY) {
@@ -124,6 +127,17 @@ const BookDetail = () => {
     }
   };
 
+  const fetchAverageRating = async () => {
+    try {
+      const data = await reviewService.getAverageRating(id);
+      // Backend returns { averageRating: number } or similar
+      const rating = typeof data === 'number' ? data : (data?.averageRating || data?.average || 0);
+      setAverageRating(rating);
+    } catch (err) {
+      console.error("Lỗi tải điểm đánh giá:", err);
+    }
+  };
+
   const fetchCategory = async (categoryId) => {
     try {
       const categories = await categoryService.getAll();
@@ -171,6 +185,7 @@ const BookDetail = () => {
       setShowReviewForm(false);
       setReviewComment("");
       fetchReviews();
+      fetchAverageRating();
     } catch (error) {
       const msg = error.response?.data?.message || "Gửi đánh giá thất bại";
       toast.error(msg);
@@ -306,16 +321,14 @@ const BookDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center border-b pb-6">
               <div className="flex flex-col items-center md:items-start text-center md:text-left">
                 <p className="text-5xl font-bold text-gray-800">
-                  {reviews.length > 0
-                    ? (reviews.reduce((acc, r) => acc + r.RATING, 0) / reviews.length).toFixed(1)
-                    : '0'}
+                  {averageRating > 0 ? averageRating.toFixed(1) : '0'}
                   <span className="text-3xl text-gray-400">/5</span>
                 </p>
                 <div className="flex items-center my-1">
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
-                      className={`w-6 h-6 ${i < Math.round(reviews.reduce((acc, r) => acc + r.RATING, 0) / (reviews.length || 1)) ? 'text-yellow-400' : 'text-gray-300'}`}
+                      className={`w-6 h-6 ${i < Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'}`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
