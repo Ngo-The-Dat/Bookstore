@@ -66,7 +66,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
-    setCart({ CART_DETAIL: [] });
+    try {
+      await cartService.clearCart();
+      toast.success("Đã xóa toàn bộ giỏ hàng");
+      setCart({ CART_DETAIL: [] });
+    } catch (error) {
+      toast.error("Lỗi khi xóa giỏ hàng");
+    }
   };
 
   return (
@@ -87,4 +93,5 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
+
 };
