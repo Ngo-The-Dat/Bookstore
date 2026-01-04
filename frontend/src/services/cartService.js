@@ -8,10 +8,10 @@ export const cartService = {
     return axiosClient.post("/cart/add", { productId, quantity });
   },
   updateQuantity: (productId, quantity) => {
-    return axiosClient.post("/cart/update", { productId, quantity }); 
+    return axiosClient.put(`/cart/update/${productId}`, { quantity }); 
   },
   removeItem: (productId) => {
-    return axiosClient.post("/cart/remove", { productId }); 
+    return axiosClient.delete(`/cart/remove/${productId}`); 
   },
   clearCart: () => {
     return axiosClient.delete("/cart"); 
