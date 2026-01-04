@@ -16,4 +16,7 @@ export const reviewService = {
     getProductReviews: (productId) => {
         return axiosClient.get(`/reviews/product/${productId}`);
     },
+    getAverageRating: (productId) => {
+        return axiosClient.get(`/reviews/average_rating/${productId}`);
+    },
 };
