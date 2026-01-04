@@ -14,6 +14,6 @@ export const cartService = {
     return axiosClient.delete(`/cart/remove/${productId}`); 
   },
   clearCart: () => {
-    return axiosClient.delete("/cart"); 
+    return axiosClient.delete("/cart/clear"); 
   }
 };
