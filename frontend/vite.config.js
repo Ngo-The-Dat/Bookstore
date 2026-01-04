@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
 
   const apiUrl = env.VITE_API_URL || 'http://localhost:8000';
 
-  console.log("Proxy target:", apiUrl); 
+  console.log("Proxy target:", apiUrl);
 
   return {
     plugins: [react(), tailwindcss()],
@@ -19,11 +19,11 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        '^/(auth|products|users|cart|orders|reviews|images|AI|categories)': {
-          target: apiUrl, 
+        '^/(auth|products|users|cart|orders|reviews|images|AI|categories|addresses|payments)': {
+          target: apiUrl,
           changeOrigin: true,
           secure: false,
-          
+
           configure: (proxy, _options) => {
             proxy.on('proxyRes', (proxyRes, req, res) => {
               if (proxyRes.headers['set-cookie']) {
