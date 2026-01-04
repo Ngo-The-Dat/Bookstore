@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, XCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,55 +8,55 @@ import { useCart } from "@/context/CartContext";
 import axiosClient from "@/api/axiosClient";
 
 const CartItemImage = ({ imageName, altText }) => {
-  const [imageUrl, setImageUrl] = useState("https://via.placeholder.com/150?text=Loading...");
+    const [imageUrl, setImageUrl] = useState("https://via.placeholder.com/150?text=Loading...");
 
-  useEffect(() => {
-    if (!imageName) {
-        setImageUrl("https://via.placeholder.com/150?text=No+Image");
-        return;
-    }
-
-    const fetchImage = async () => {
-      try {
-        const data = await axiosClient.get("/images/urls", {
-          params: { names: imageName }
-        });
-
-        let url = null;
-        if (typeof data === "string") url = data;
-        else if (Array.isArray(data)) url = data[0];
-        else if (typeof data === "object" && data !== null) {
-          url =
-            data[imageName] ||
-            data.url ||
-            (Array.isArray(data.urls) && data.urls[0]) ||
-            Object.values(data).find(v => typeof v === "string" && v.startsWith("http")) ||
-            null;
+    useEffect(() => {
+        if (!imageName) {
+            setImageUrl("https://via.placeholder.com/150?text=No+Image");
+            return;
         }
 
-        if (url) setImageUrl(url);
-        else setImageUrl("https://via.placeholder.com/150?text=Error");
-      } catch (error) {
-        console.error("Lỗi ảnh:", error);
-        setImageUrl("https://via.placeholder.com/150?text=Error");
-      }
-    };
+        const fetchImage = async () => {
+            try {
+                const data = await axiosClient.get("/images/urls", {
+                    params: { names: imageName }
+                });
 
-    fetchImage();
-  }, [imageName]);
+                let url = null;
+                if (typeof data === "string") url = data;
+                else if (Array.isArray(data)) url = data[0];
+                else if (typeof data === "object" && data !== null) {
+                    url =
+                        data[imageName] ||
+                        data.url ||
+                        (Array.isArray(data.urls) && data.urls[0]) ||
+                        Object.values(data).find(v => typeof v === "string" && v.startsWith("http")) ||
+                        null;
+                }
 
-  return (
-    <img
-      src={imageUrl}
-      alt={altText}
-      className="w-full h-full object-cover"
-      onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Error"; }}
-    />
-  );
+                if (url) setImageUrl(url);
+                else setImageUrl("https://via.placeholder.com/150?text=Error");
+            } catch (error) {
+                console.error("Lỗi ảnh:", error);
+                setImageUrl("https://via.placeholder.com/150?text=Error");
+            }
+        };
+
+        fetchImage();
+    }, [imageName]);
+
+    return (
+        <img
+            src={imageUrl}
+            alt={altText}
+            className="w-full h-full object-cover"
+            onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Error"; }}
+        />
+    );
 };
 
 const CartPage = () => {
-    const { cartItems, isLoading, updateQuantity, removeFromCart, cartTotal } = useCart();
+    const { cartItems, isLoading, updateQuantity, removeFromCart, clearCart, cartTotal } = useCart();
 
     if (isLoading) {
         return (
@@ -80,7 +80,19 @@ const CartPage = () => {
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Tiếp tục mua sắm
                     </Link>
-                    <h1 className="text-3xl font-bold text-gray-900 mt-4">Giỏ hàng của bạn</h1>
+                    <div className="flex items-center justify-between mt-4">
+                        <h1 className="text-3xl font-bold text-gray-900">Giỏ hàng của bạn</h1>
+                        {cartItems.length > 0 && (
+                            <Button
+                                onClick={clearCart}
+                                variant="destructive"
+                                className="flex items-center gap-2 bg-red-500 hover:bg-red-600"
+                            >
+                                <XCircle className="w-4 h-4" />
+                                Xóa tất cả
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 {cartItems.length === 0 ? (
@@ -105,9 +117,9 @@ const CartPage = () => {
                                     {/* Product Image Wrapper */}
                                     <div className="w-24 h-32 bg-gray-200 rounded-md flex-shrink-0 overflow-hidden border">
                                         {/* Sử dụng Component CartItemImage thay vì thẻ img thường */}
-                                        <CartItemImage 
-                                            imageName={item.PRODUCT?.IMG_CARD} 
-                                            altText={item.PRODUCT?.TENSACH} 
+                                        <CartItemImage
+                                            imageName={item.PRODUCT?.IMG_CARD}
+                                            altText={item.PRODUCT?.TENSACH}
                                         />
                                     </div>
 
