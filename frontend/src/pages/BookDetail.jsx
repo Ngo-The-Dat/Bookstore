@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Edit2, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,9 @@ const BookDetail = () => {
   const [reviewRating, setReviewRating] = useState(5);
   const [category, setCategory] = useState(null);
   const [averageRating, setAverageRating] = useState(0);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editComment, setEditComment] = useState("");
+  const [editRating, setEditRating] = useState(5);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -188,6 +192,55 @@ const BookDetail = () => {
       fetchAverageRating();
     } catch (error) {
       const msg = error.response?.data?.message || "Gửi đánh giá thất bại";
+      toast.error(msg);
+    }
+  };
+
+  const handleStartEdit = (review) => {
+    setEditingReviewId(review._id);
+    setEditComment(review.COMMENT);
+    setEditRating(review.RATING);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingReviewId(null);
+    setEditComment("");
+    setEditRating(5);
+  };
+
+  const handleUpdateReview = async () => {
+    if (!editComment.trim()) {
+      toast.error("Vui lòng nhập nội dung đánh giá");
+      return;
+    }
+
+    try {
+      await reviewService.updateReview(editingReviewId, {
+        RATING: editRating,
+        COMMENT: editComment,
+      });
+
+      toast.success("Đã cập nhật đánh giá");
+      setEditingReviewId(null);
+      setEditComment("");
+      fetchReviews();
+      fetchAverageRating();
+    } catch (error) {
+      const msg = error.response?.data?.message || "Cập nhật đánh giá thất bại";
+      toast.error(msg);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa đánh giá này?")) return;
+
+    try {
+      await reviewService.deleteReview(reviewId);
+      toast.success("Đã xóa đánh giá");
+      fetchReviews();
+      fetchAverageRating();
+    } catch (error) {
+      const msg = error.response?.data?.message || "Xóa đánh giá thất bại";
       toast.error(msg);
     }
   };
