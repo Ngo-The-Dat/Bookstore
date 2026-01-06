@@ -303,7 +303,8 @@ const ProfilePage = () => {
                                             {orders.map((order) => (
                                                 <div
                                                     key={order._id}
-                                                    className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                                                    className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300"
+                                                    onClick={() => navigate(`/order/${order._id}`)}
                                                 >
                                                     <div className="flex flex-wrap justify-between items-start gap-4 mb-3">
                                                         <div>
@@ -425,8 +426,8 @@ const ProfilePage = () => {
                                                                         <Star
                                                                             key={i}
                                                                             className={`w-4 h-4 ${i < review.RATING
-                                                                                    ? "fill-yellow-400 text-yellow-400"
-                                                                                    : "text-gray-300"
+                                                                                ? "fill-yellow-400 text-yellow-400"
+                                                                                : "text-gray-300"
                                                                                 }`}
                                                                         />
                                                                     ))}
