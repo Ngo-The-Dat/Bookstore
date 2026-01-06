@@ -165,10 +165,7 @@ const OrderManagement = () => {
                                         <select
                                             value={order.STATUS}
                                             onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                                            className={`px-2 py-1 text-xs rounded-lg border bg-${getStatusColor(order.STATUS)}-500/20 border-${getStatusColor(order.STATUS)}-500/30 text-${getStatusColor(order.STATUS)}-300 focus:outline-none cursor-pointer`}
-                                            style={{
-                                                backgroundColor: `rgba(var(--${getStatusColor(order.STATUS)}-500), 0.2)`,
-                                            }}
+                                            className="px-2 py-1 text-xs rounded-lg border bg-slate-700 border-white/20 text-white focus:outline-none cursor-pointer"
                                         >
                                             {statusOptions.map((s) => (
                                                 <option key={s.value} value={s.value}>{s.label}</option>
@@ -177,10 +174,10 @@ const OrderManagement = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 text-xs rounded-full ${order.PAYMENT_STATUS === 'PAID'
-                                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                                : order.PAYMENT_STATUS === 'PENDING'
-                                                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                                    : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                            : order.PAYMENT_STATUS === 'PENDING'
+                                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                                : 'bg-red-500/20 text-red-300 border border-red-500/30'
                                             }`}>
                                             {order.PAYMENT_STATUS === 'PAID' ? 'Đã thanh toán' :
                                                 order.PAYMENT_STATUS === 'PENDING' ? 'Chờ thanh toán' :
