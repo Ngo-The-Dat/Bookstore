@@ -21,8 +21,8 @@ async function upsertMany(models, items, keySelector) {
         let doc = await models.findOne(filter);
 
         if (doc) {
-            // 2a. Nếu CÓ: Cập nhật các trường
-            Object.assign(doc, item);
+            // 2a. Nếu CÓ: Cập nhật các trường (giữ trạng thái modified của Mongoose)
+            doc.set(item);
             const updated = await doc.save();
             docs.push(updated);
         } else {

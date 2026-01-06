@@ -1,5 +1,6 @@
 import product from "../models/product.js";
 import order from "../models/order.js";
+import removeVietnameseTones from "../utils/productUtils.js"
 
 export const all_products = async () => {
     return await product.find();
@@ -88,18 +89,6 @@ export const get_most_view_books = async () => {
     return result;
 };
 
-const removeVietnameseTones = (str) => {
-    str = str.replace(/á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, "a");
-    str = str.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, "e");
-    str = str.replace(/i|í|ì|ỉ|ĩ|ị/gi, "i");
-    str = str.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, "o");
-    str = str.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, "u");
-    str = str.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, "y");
-    str = str.replace(/đ/gi, "d");
-    str = str.replace(/\s+/g, " ").trim();
-    return str;
-};
-
 export const search_products = async (rawName) => {
     if (!rawName || !rawName.trim()) {
         const error = new Error("Vui lòng nhập từ khóa");
@@ -110,7 +99,7 @@ export const search_products = async (rawName) => {
     const normalized = removeVietnameseTones(rawName.trim());
 
     const products = await product
-        .find({ TENSACH: { $regex: normalized, $options: "i" } })
+        .find({ TENKHONGDAU: { $regex: normalized, $options: "i" } })
 
     return products;
 };

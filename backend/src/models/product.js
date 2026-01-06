@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
+import removeVietnameseTones from "../utils/productUtils.js"
+
 const { Schema, model } = mongoose;
 
 const product_schema = new Schema({
     TENSACH: {
         type: String,
         required: true
+    },
+    TENKHONGDAU: {
+        type: String
     },
     GIABIA: {
         type: Number,
@@ -54,6 +59,13 @@ const product_schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'category'
     }
+})
+
+product_schema.pre('save', function (next) {
+    if (this.isModified('TENSACH')) {
+        this.TENKHONGDAU = removeVietnameseTones(this.TENSACH)
+    }
+    next()
 })
 
 const product = model('product', product_schema)
