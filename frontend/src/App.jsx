@@ -12,6 +12,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import CategoryPage from "./pages/CategoryPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
 import { CartProvider } from "./context/CartContext";
 
 // Admin Pages
@@ -37,6 +38,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/book/:id" element={<BookDetail />} />
+            <Route path="/order/:id" element={<OrderDetailPage />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
