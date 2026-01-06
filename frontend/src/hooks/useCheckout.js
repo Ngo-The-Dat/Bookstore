@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { orderService } from "@/services/orderService";
+import { authService } from "@/services/authService";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 
@@ -15,6 +16,24 @@ export const useCheckout = () => {
     city: "",
     paymentMethod: "CASH",
   });
+
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        if (user) {
+          setFormData(prev => ({
+            ...prev,
+            fullName: user.HOTEN || "",
+            phone: user.SDT || ""
+          }));
+        }
+      } catch (error) {
+        // Ignore error if user info can't be loaded (maybe guest checkout or token expired)
+      }
+    };
+    loadUserInfo();
+  }, []);
 
   const shippingFee = 30000;
   const finalTotal = cartTotal + shippingFee;
