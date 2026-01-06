@@ -73,5 +73,5 @@ export const authRedirect = (req, res) => {
 
     // Redirect về frontend callback page
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-    return res.redirect(`${frontendUrl}/auth/google/callback`);
+    return res.redirect(`${frontendUrl}`);
 };

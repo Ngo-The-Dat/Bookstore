@@ -86,7 +86,8 @@ const handleSocialLogin = async (providerName, profile, done) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/google/callback" // URL Google sẽ gọi lại sau khi user bấm OK
+    callbackURL: "/auth/google/callback", // URL Google sẽ gọi lại sau khi user bấm OK
+    scope: ['profile', 'email']
 },
     async (accessToken, refreshToken, profile, done) => {
         // Gọi hàm chung ở trên
