@@ -36,7 +36,7 @@ export const adminService = {
 
     // Category Management
     getAllCategories: () => {
-        return axiosClient.get("/category");
+        return axiosClient.get("/categories");
     },
 
     // Dashboard Stats
