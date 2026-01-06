@@ -15,11 +15,11 @@ export const createOrder = async (req, res) => {
     res.status(201).json({ message: "Tạo đơn hàng thành công", order: newOrder })
   } catch (err) {
     console.error(err)
-    const statusCode = err.message.includes("không hợp lệ") || 
-                       err.message.includes("trống") ||
-                       err.message.includes("hết hạn") ||
-                       err.message.includes("tối đa") ? 400 : 
-                       err.message.includes("Không tìm thấy") ? 404 : 500
+    const statusCode = err.message.includes("không hợp lệ") ||
+      err.message.includes("trống") ||
+      err.message.includes("hết hạn") ||
+      err.message.includes("tối đa") ? 400 :
+      err.message.includes("Không tìm thấy") ? 404 : 500
     res.status(statusCode).json({ message: err.message || "Lỗi server khi tạo đơn hàng" })
   }
 }
@@ -36,6 +36,16 @@ export const getOrderHistory = async (req, res) => {
   }
 }
 
+// Lấy tất cả đơn hàng (admin only)
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await orderService.getAllOrders()
+    res.status(200).json(orders)
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Lỗi khi lấy tất cả đơn hàng" })
+  }
+}
+
 // Lấy chi tiết 1 đơn hàng
 export const getOrderById = async (req, res) => {
   try {
@@ -44,7 +54,7 @@ export const getOrderById = async (req, res) => {
     res.status(200).json(order)
   } catch (err) {
     const statusCode = err.message.includes("không hợp lệ") ? 400 :
-                       err.message.includes("Không tìm thấy") ? 404 : 500
+      err.message.includes("Không tìm thấy") ? 404 : 500
     res.status(statusCode).json({ message: err.message || "Lỗi khi lấy chi tiết đơn hàng" })
   }
 }
@@ -64,7 +74,7 @@ export const updateOrderStatus = async (req, res) => {
   } catch (err) {
     console.error(err)
     const statusCode = err.message.includes("không hợp lệ") ? 400 :
-                       err.message.includes("Không tìm thấy") ? 404 : 500
+      err.message.includes("Không tìm thấy") ? 404 : 500
     return res.status(statusCode).json({ message: err.message || "Lỗi khi cập nhật đơn hàng" })
   }
 }
@@ -77,7 +87,7 @@ export const cancelOrder = async (req, res) => {
     res.status(200).json({ message: "Đã hủy đơn hàng", order })
   } catch (err) {
     const statusCode = err.message.includes("không hợp lệ") ? 400 :
-                       err.message.includes("Không tìm thấy") ? 404 : 500
+      err.message.includes("Không tìm thấy") ? 404 : 500
     res.status(statusCode).json({ message: err.message || "Lỗi khi hủy đơn hàng" })
   }
 }
