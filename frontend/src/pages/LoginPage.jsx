@@ -73,16 +73,6 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <div />
-              <Link
-                to="/forgot-password"
-                className="text-primary hover:underline"
-              >
-                Quên mật khẩu?
-              </Link>
-            </div>
-
             <Button
               type="submit"
               className="w-full mt-2"
