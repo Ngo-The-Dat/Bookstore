@@ -16,7 +16,19 @@ router.post('/logout', logout);
 
 // 1. LOGIN LOCAL
 // session: false vì ta dùng JWT, không dùng cookie session
-router.post('/login', passport.authenticate('local', { session: false }), authResponse);
+// Using custom callback to return proper error messages
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            return res.status(500).json({ message: 'Đã có lỗi xảy ra', error: err.message });
+        }
+        if (!user) {
+            return res.status(401).json({ message: info?.message || 'Đăng nhập thất bại' });
+        }
+        req.user = user;
+        next();
+    })(req, res, next);
+}, authResponse);
 
 // 2. LOGIN GOOGLE
 // Bước 2a: Client bấm vào link này -> Chuyển hướng sang Google
