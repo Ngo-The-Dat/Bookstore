@@ -1,6 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { adminService } from "@/services/adminService";
 import { toast } from "sonner";
+import axios from "axios";
+
+// Component to resolve and display product image
+const ProductImage = ({ imageName, alt, className }) => {
+    const [imageUrl, setImageUrl] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchImageUrl = async () => {
+            if (!imageName) {
+                setImageUrl(null);
+                return;
+            }
+
+            // If it's already a full URL, use it directly
+            if (imageName.startsWith('http://') || imageName.startsWith('https://')) {
+                setImageUrl(imageName);
+                return;
+            }
+
+            try {
+                const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+                const endpoint = `${API_BASE_URL}/images/urls`;
+                const res = await axios.get(endpoint, { params: { names: imageName } });
+
+                if (!isMounted) return;
+
+                const data = res?.data;
+                let resolvedUrl = null;
+
+                if (typeof data === "string") {
+                    resolvedUrl = data;
+                } else if (Array.isArray(data)) {
+                    resolvedUrl = data[0] || null;
+                } else if (typeof data === "object") {
+                    resolvedUrl = data.url ||
+                        (Array.isArray(data.urls) && data.urls[0]) ||
+                        data[imageName] ||
+                        Object.values(data).find(v => typeof v === "string") ||
+                        null;
+                }
+
+                if (resolvedUrl) {
+                    setImageUrl(resolvedUrl);
+                }
+            } catch (error) {
+                console.error(`Error fetching image '${imageName}':`, error);
+            }
+        };
+
+        fetchImageUrl();
+        return () => { isMounted = false; };
+    }, [imageName]);
+
+    if (!imageUrl) {
+        return (
+            <div className="w-full h-full flex items-center justify-center text-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+        );
+    }
+
+    return <img src={imageUrl} alt={alt} className={className} />;
+};
 
 const ProductManagement = () => {
     const [products, setProducts] = useState([]);
@@ -163,19 +230,11 @@ const ProductManagement = () => {
                 {filteredProducts.map((product) => (
                     <div key={product._id} className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all group">
                         <div className="aspect-[3/4] relative overflow-hidden bg-slate-700/50">
-                            {product.IMG_CARD ? (
-                                <img
-                                    src={product.IMG_CARD}
-                                    alt={product.TENSACH}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-white/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                            )}
+                            <ProductImage
+                                imageName={product.IMG_CARD}
+                                alt={product.TENSACH}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                             <div className="absolute top-2 right-2 flex gap-1">
                                 <button
                                     onClick={() => handleOpenEdit(product)}
