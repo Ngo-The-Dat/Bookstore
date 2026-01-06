@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, logout, authResponse } from '../controllers/authController.js';
+import { signup, logout, authResponse, authRedirect } from '../controllers/authController.js';
 import { validate, signupRules } from '../middlewares/validate.js';
 import passport from '../config/passport.js';
 
@@ -23,9 +23,10 @@ router.post('/login', passport.authenticate('local', { session: false }), authRe
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // Bước 2b: Google gọi lại link này (Callback)
-router.get('/google/callback', 
+// Sau khi set cookie, redirect về frontend
+router.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login-fail' }),
-    authResponse // Nếu thành công -> trả về JSON Token
+    authRedirect // Redirect về frontend sau khi set cookie
 );
 
 export default router;
