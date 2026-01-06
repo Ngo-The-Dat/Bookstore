@@ -97,6 +97,9 @@ export const search_products = async (rawName) => {
     }
 
     const normalized = removeVietnameseTones(rawName.trim());
+    if (normalized == '$') {
+        return null;
+    }
 
     const products = await product
         .find({ SLUG: { $regex: normalized, $options: "i" } });
