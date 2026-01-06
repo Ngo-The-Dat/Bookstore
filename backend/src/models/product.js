@@ -1,49 +1,49 @@
 import mongoose from "mongoose";
-import removeVietnameseTones from "../utils/productUtils.js"
+import removeVietnameseTones from "../utils/productUtils.js";
 
 const { Schema, model } = mongoose;
 
 const product_schema = new Schema({
-    TENSACH: {
+    TITLE: {
         type: String,
         required: true
     },
-    TENKHONGDAU: {
+    SLUG: {
         type: String
     },
-    GIABIA: {
+    LIST_PRICE: {
         type: Number,
         required: [true, "Vui lòng nhập giá tiền"],
         min: [0, "Giá tiền không được âm"]
     },
-    GIABAN: {
+    SALE_PRICE: {
         type: Number,
         required: [true, "Vui lòng nhập giá tiền"],
         min: [0, "Giá tiền không được âm"]
     },
-    MOTA: {
+    DESCRIPTION: {
         type: String,
         trim: true
     },
-    IMG_DETAIL: {
+    IMAGE_DETAIL: {
         type: [String]
     },
-    IMG_CARD: {
+    IMAGE_CARD: {
         type: String
     },
-    TACGIA: {
+    AUTHOR: {
         type: String,
         required: [true, "Vui lòng nhập tên tác giả"]
     },
-    NXB: {
+    PUBLISHER: {
         type: String,
         required: [true, "Vui lòng nhập nhà xuất bản"]
     },
-    SOTRANG: {
+    PAGE_COUNT: {
         type: Number,
         required: [true, "Vui lòng nhập số trang"]
     },
-    TONKHO: {
+    STOCK: {
         type: Number,
         required: [true]
     },
@@ -51,7 +51,7 @@ const product_schema = new Schema({
         type: Date,
         default: () => Date.now()
     },
-    VIEWCOUNT: {
+    VIEW_COUNT: {
         type: Number,
         default: 0
     },
@@ -59,14 +59,14 @@ const product_schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'category'
     }
-})
+});
 
 product_schema.pre('save', function (next) {
-    if (this.isModified('TENSACH')) {
-        this.TENKHONGDAU = removeVietnameseTones(this.TENSACH)
+    if (this.isModified('TITLE')) {
+        this.SLUG = removeVietnameseTones(this.TITLE);
     }
-    next()
-})
+    next();
+});
 
-const product = model('product', product_schema)
-export default product
+const product = model('product', product_schema);
+export default product;

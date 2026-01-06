@@ -24,8 +24,8 @@ export const useCheckout = () => {
         if (user) {
           setFormData(prev => ({
             ...prev,
-            fullName: user.HOTEN || "",
-            phone: user.SDT || ""
+            fullName: user.FULL_NAME || "",
+            phone: user.PHONE || ""
           }));
         }
       } catch (error) {

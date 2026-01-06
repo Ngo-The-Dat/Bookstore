@@ -79,7 +79,7 @@ const OrderManagement = () => {
     const filteredOrders = orders.filter(order => {
         const matchesSearch =
             order._id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.USER?.HOTEN?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.USER?.FULL_NAME?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             order.USER?.EMAIL?.toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesStatus = statusFilter === "all" || order.STATUS === statusFilter;
@@ -154,7 +154,7 @@ const OrderManagement = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div>
-                                            <p className="text-white text-sm">{order.USER?.HOTEN || "N/A"}</p>
+                                            <p className="text-white text-sm">{order.USER?.FULL_NAME || "N/A"}</p>
                                             <p className="text-white/50 text-xs">{order.USER?.EMAIL}</p>
                                         </div>
                                     </td>
@@ -236,11 +236,11 @@ const OrderManagement = () => {
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div>
                                     <span className="text-white/50">Họ tên:</span>
-                                    <span className="text-white ml-2">{selectedOrder.USER?.HOTEN}</span>
+                                    <span className="text-white ml-2">{selectedOrder.USER?.FULL_NAME}</span>
                                 </div>
                                 <div>
                                     <span className="text-white/50">SĐT:</span>
-                                    <span className="text-white ml-2">{selectedOrder.USER?.SDT}</span>
+                                    <span className="text-white ml-2">{selectedOrder.USER?.PHONE}</span>
                                 </div>
                                 <div className="col-span-2">
                                     <span className="text-white/50">Email:</span>
@@ -260,12 +260,12 @@ const OrderManagement = () => {
                                 {selectedOrder.ITEM?.map((item, index) => (
                                     <div key={index} className="flex items-center gap-3 p-2 bg-white/5 rounded-lg">
                                         <div className="w-12 h-16 bg-slate-700 rounded overflow-hidden flex-shrink-0">
-                                            {item.PRODUCT?.IMG_CARD && (
-                                                <img src={item.PRODUCT.IMG_CARD} alt="" className="w-full h-full object-cover" />
+                                            {item.PRODUCT?.IMAGE_CARD && (
+                                                <img src={item.PRODUCT.IMAGE_CARD} alt="" className="w-full h-full object-cover" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-white text-sm truncate">{item.PRODUCT?.TENSACH || "Sản phẩm"}</p>
+                                            <p className="text-white text-sm truncate">{item.PRODUCT?.TITLE || "Sản phẩm"}</p>
                                             <p className="text-white/50 text-xs">SL: {item.QUANTITY} x {formatPrice(item.PRICE_AT_PURCHASE)}</p>
                                         </div>
                                         <div className="text-cyan-400 font-semibold text-sm">

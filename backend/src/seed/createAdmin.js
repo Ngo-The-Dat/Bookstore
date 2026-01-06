@@ -18,11 +18,11 @@ const createAdmin = async () => {
 
         // 2. Tạo user
         const newUser = await User.create({// <---- Chỉnh sửa thông tin ở đây
-            HOTEN: 'Admin',
-            PHAI: 'Nam',
+            FULL_NAME: 'Admin',
+            GENDER: 'Nam',
             EMAIL: adminEmail,
-            SDT: '0000000001',
-            NGAYSN: new Date(),
+            PHONE: '0000000001',
+            DATE_OF_BIRTH: new Date(),
             ROLE: 'admin'
         });
 

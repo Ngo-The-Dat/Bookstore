@@ -56,9 +56,9 @@ const UserManagement = () => {
     };
 
     const filteredUsers = users.filter(user =>
-        user.HOTEN?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.FULL_NAME?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.EMAIL?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.SDT?.includes(searchTerm)
+        user.PHONE?.includes(searchTerm)
     );
 
     if (loading) {
@@ -108,25 +108,25 @@ const UserManagement = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white text-sm font-medium">
-                                                {user.HOTEN?.charAt(0)?.toUpperCase()}
+                                                {user.FULL_NAME?.charAt(0)?.toUpperCase()}
                                             </div>
-                                            <span className="text-white font-medium">{user.HOTEN}</span>
+                                            <span className="text-white font-medium">{user.FULL_NAME}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-white/80">{user.EMAIL}</td>
-                                    <td className="px-6 py-4 text-white/80">{user.SDT}</td>
+                                    <td className="px-6 py-4 text-white/80">{user.PHONE}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 text-xs rounded-full ${user.ROLE === 'admin'
-                                                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                                                : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'
+                                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                                            : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'
                                             }`}>
                                             {user.ROLE === 'admin' ? 'Admin' : 'Khách hàng'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 text-xs rounded-full ${user.IS_ACTIVE
-                                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                                : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                            : 'bg-red-500/20 text-red-300 border border-red-500/30'
                                             }`}>
                                             {user.IS_ACTIVE ? 'Hoạt động' : 'Đã khóa'}
                                         </span>
@@ -143,7 +143,7 @@ const UserManagement = () => {
                                                 </svg>
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(user._id, user.HOTEN)}
+                                                onClick={() => handleDelete(user._id, user.FULL_NAME)}
                                                 className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                                                 title="Xóa"
                                             >
@@ -171,7 +171,7 @@ const UserManagement = () => {
                                 <label className="block text-sm text-white/60 mb-2">Họ tên</label>
                                 <input
                                     type="text"
-                                    value={editingUser.HOTEN}
+                                    value={editingUser.FULL_NAME}
                                     disabled
                                     className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white/50 cursor-not-allowed"
                                 />

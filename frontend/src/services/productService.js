@@ -9,18 +9,18 @@ export const productService = {
   },
   searchByName: (keyword) => {
     // API: /products/search_products?name=abc
-    return axiosClient.get("/products/search_products", { 
-      params: { name: keyword } 
+    return axiosClient.get("/products/search_products", {
+      params: { name: keyword }
     });
   },
   getAuthors: () => {
-    return axiosClient.get("/products/TACGIA");
+    return axiosClient.get("/products/AUTHOR");
   },
   getPublishers: () => {
-    return axiosClient.get("/products/NXB");
+    return axiosClient.get("/products/PUBLISHER");
   },
   filter: (params) => {
-    // params: { TACGIA, NXB, minPrice, maxPrice, sort, order }
+    // params: { AUTHOR, PUBLISHER, minPrice, maxPrice, sort, order }
     return axiosClient.get("/products/filter_product", { params });
   },
 };

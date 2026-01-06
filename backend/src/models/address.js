@@ -8,7 +8,7 @@ const address_schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: user
     },
-    DIACHI: {
+    ADDRESS_LINE: {
         type: String,
         required: true
     },

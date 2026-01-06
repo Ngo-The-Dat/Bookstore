@@ -57,7 +57,7 @@ const handleSocialLogin = async (providerName, profile, done) => {
             if (!user) {
                 // Case C: User mới tinh -> Tạo User
                 user = new User({
-                    HOTEN: profile.displayName,
+                    FULL_NAME: profile.displayName,
                     EMAIL: email,
                 });
                 await user.save({ session });

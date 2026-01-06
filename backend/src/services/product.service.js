@@ -1,6 +1,6 @@
 import product from "../models/product.js";
 import order from "../models/order.js";
-import removeVietnameseTones from "../utils/productUtils.js"
+import removeVietnameseTones from "../utils/productUtils.js";
 
 export const all_products = async () => {
     return await product.find();
@@ -9,14 +9,14 @@ export const all_products = async () => {
 export const filter_products = async (query_params) => {
     let filter = {};
     // lấy thông tin từ query để tạo object filter
-    const { TACGIA, NXB, minPrice, maxPrice, sort, order } = query_params;
+    const { AUTHOR, PUBLISHER, minPrice, maxPrice, sort, order } = query_params;
     // nhét dữ liệu từ query vào filter
-    if (TACGIA) filter.TACGIA = TACGIA;
-    if (NXB) filter.NXB = NXB;
+    if (AUTHOR) filter.AUTHOR = AUTHOR;
+    if (PUBLISHER) filter.PUBLISHER = PUBLISHER;
     if (minPrice || maxPrice) {
-        filter.GIABAN = {};
-        if (minPrice) filter.GIABAN.$gte = Number(minPrice);
-        if (maxPrice) filter.GIABAN.$lte = Number(maxPrice);
+        filter.SALE_PRICE = {};
+        if (minPrice) filter.SALE_PRICE.$gte = Number(minPrice);
+        if (maxPrice) filter.SALE_PRICE.$lte = Number(maxPrice);
     }
     // nếu có sort(TACGIA, NXB,...) thì tạo sort_option và sort theo biến order (giảm = -1 & tăng = 1)
     let sort_option = {};
@@ -70,10 +70,10 @@ export const get_bestsellers = async () => {
             $project: {
                 _id: 0,
                 productId: "$_id",
-                name: "$product_info.TENSACH",
+                name: "$product_info.TITLE",
                 totalSold: 1,
-                price: "$product_info.GIABAN",
-                img: "$product_info.IMG"
+                price: "$product_info.SALE_PRICE",
+                img: "$product_info.IMAGE_CARD"
             }
         }
     ]);
@@ -83,7 +83,7 @@ export const get_bestsellers = async () => {
 
 export const get_most_view_books = async () => {
     const result = await product.aggregate([
-        { $sort: { VIEWCOUNT: -1 } },
+        { $sort: { VIEW_COUNT: -1 } },
         { $limit: 10 }
     ]);
     return result;
@@ -99,7 +99,7 @@ export const search_products = async (rawName) => {
     const normalized = removeVietnameseTones(rawName.trim());
 
     const products = await product
-        .find({ TENKHONGDAU: { $regex: normalized, $options: "i" } })
+        .find({ SLUG: { $regex: normalized, $options: "i" } });
 
     return products;
 };
@@ -108,14 +108,14 @@ export const get_all_NXB = async () => {
     const nxb = await product.aggregate([
         {
             $group: {
-                _id: "$NXB",
+                _id: "$PUBLISHER",
                 total_books: { $sum: 1 }
             }
         },
         {
             $project: {
                 _id: 0,
-                NXB: "$_id",
+                PUBLISHER: "$_id",
                 total_books: "$total_books"
             }
         }
@@ -128,14 +128,14 @@ export const get_all_TACGIA = async () => {
     const nxb = await product.aggregate([
         {
             $group: {
-                _id: "$TACGIA",
+                _id: "$AUTHOR",
                 total_books: { $sum: 1 }
             }
         },
         {
             $project: {
                 _id: 0,
-                NXB: "$_id",
+                AUTHOR: "$_id",
                 total_books: "$total_books"
             }
         }

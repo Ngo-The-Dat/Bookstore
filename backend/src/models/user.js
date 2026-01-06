@@ -4,34 +4,29 @@ import mongoose from "mongoose"
 const { Schema, model } = mongoose
 
 const user_schema = new Schema({
-    HOTEN: {
+    FULL_NAME: {
         type: String,
         required: true
     },
-    PHAI: {
+    GENDER: {
         type: String,
-        // required: true,
         enum: ['Nam', 'Nữ']
     },
     EMAIL: {
         type: String,
         required: [true, "Vui lòng nhập email"],
-        // unique: [true, "Email không được trùng"], // không được trùng trong database
         match: [/^\S+@\S+\.\S+$/, 'Email không hợp lệ!'],
         lowercase: true
     },
-    SDT: {
+    PHONE: {
         type: String,
-        // required: [true, "Vui lòng nhập số điện thoại"],
         match: [/^[0-9]{10}$/, 'Số điện thoại không hợp lệ']
     },
-    NGAYSN: {
-        type: Date, //yy/mm/dd
-        // required: true
+    DATE_OF_BIRTH: {
+        type: Date,
     },
     ROLE: {
         type: String,
-        // required: true,
         enum: ['customer', 'admin'],
         default: 'customer'
     },
@@ -44,7 +39,7 @@ const user_schema = new Schema({
     {
         timestamps: true
     }
-)
+);
 
 const user = model('user', user_schema);
-export default user
+export default user;

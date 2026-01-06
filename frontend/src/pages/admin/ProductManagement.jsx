@@ -77,15 +77,15 @@ const ProductManagement = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [formData, setFormData] = useState({
-        TENSACH: "",
-        GIABIA: "",
-        GIABAN: "",
-        MOTA: "",
-        TACGIA: "",
-        NXB: "",
-        SOTRANG: "",
-        TONKHO: "",
-        IMG_CARD: "",
+        TITLE: "",
+        LIST_PRICE: "",
+        SALE_PRICE: "",
+        DESCRIPTION: "",
+        AUTHOR: "",
+        PUBLISHER: "",
+        PAGE_COUNT: "",
+        STOCK: "",
+        IMAGE_CARD: "",
         CATEGORY: ""
     });
 
@@ -111,15 +111,15 @@ const ProductManagement = () => {
     const handleOpenAdd = () => {
         setEditingProduct(null);
         setFormData({
-            TENSACH: "",
-            GIABIA: "",
-            GIABAN: "",
-            MOTA: "",
-            TACGIA: "",
-            NXB: "",
-            SOTRANG: "",
-            TONKHO: "",
-            IMG_CARD: "",
+            TITLE: "",
+            LIST_PRICE: "",
+            SALE_PRICE: "",
+            DESCRIPTION: "",
+            AUTHOR: "",
+            PUBLISHER: "",
+            PAGE_COUNT: "",
+            STOCK: "",
+            IMAGE_CARD: "",
             CATEGORY: categories[0]?._id || ""
         });
         setShowModal(true);
@@ -128,15 +128,15 @@ const ProductManagement = () => {
     const handleOpenEdit = (product) => {
         setEditingProduct(product);
         setFormData({
-            TENSACH: product.TENSACH || "",
-            GIABIA: product.GIABIA || "",
-            GIABAN: product.GIABAN || "",
-            MOTA: product.MOTA || "",
-            TACGIA: product.TACGIA || "",
-            NXB: product.NXB || "",
-            SOTRANG: product.SOTRANG || "",
-            TONKHO: product.TONKHO || "",
-            IMG_CARD: product.IMG_CARD || "",
+            TITLE: product.TITLE || "",
+            LIST_PRICE: product.LIST_PRICE || "",
+            SALE_PRICE: product.SALE_PRICE || "",
+            DESCRIPTION: product.DESCRIPTION || "",
+            AUTHOR: product.AUTHOR || "",
+            PUBLISHER: product.PUBLISHER || "",
+            PAGE_COUNT: product.PAGE_COUNT || "",
+            STOCK: product.STOCK || "",
+            IMAGE_CARD: product.IMAGE_CARD || "",
             CATEGORY: product.CATEGORY?._id || product.CATEGORY || ""
         });
         setShowModal(true);
@@ -147,10 +147,10 @@ const ProductManagement = () => {
 
         const payload = {
             ...formData,
-            GIABIA: Number(formData.GIABIA),
-            GIABAN: Number(formData.GIABAN),
-            SOTRANG: Number(formData.SOTRANG),
-            TONKHO: Number(formData.TONKHO)
+            LIST_PRICE: Number(formData.LIST_PRICE),
+            SALE_PRICE: Number(formData.SALE_PRICE),
+            PAGE_COUNT: Number(formData.PAGE_COUNT),
+            STOCK: Number(formData.STOCK)
         };
 
         try {
@@ -185,9 +185,9 @@ const ProductManagement = () => {
     };
 
     const filteredProducts = products.filter(product =>
-        product.TENSACH?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.TACGIA?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.NXB?.toLowerCase().includes(searchTerm.toLowerCase())
+        product.TITLE?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.AUTHOR?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.PUBLISHER?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) {
@@ -231,8 +231,8 @@ const ProductManagement = () => {
                     <div key={product._id} className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all group">
                         <div className="aspect-[3/4] relative overflow-hidden bg-slate-700/50">
                             <ProductImage
-                                imageName={product.IMG_CARD}
-                                alt={product.TENSACH}
+                                imageName={product.IMAGE_CARD}
+                                alt={product.TITLE}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="absolute top-2 right-2 flex gap-1">
@@ -245,7 +245,7 @@ const ProductManagement = () => {
                                     </svg>
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(product._id, product.TENSACH)}
+                                    onClick={() => handleDelete(product._id, product.TITLE)}
                                     className="p-2 bg-slate-900/80 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-colors"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,11 +255,11 @@ const ProductManagement = () => {
                             </div>
                         </div>
                         <div className="p-4">
-                            <h3 className="text-white font-medium text-sm line-clamp-2 mb-1">{product.TENSACH}</h3>
-                            <p className="text-white/50 text-xs mb-2">{product.TACGIA}</p>
+                            <h3 className="text-white font-medium text-sm line-clamp-2 mb-1">{product.TITLE}</h3>
+                            <p className="text-white/50 text-xs mb-2">{product.AUTHOR}</p>
                             <div className="flex items-center justify-between">
-                                <span className="text-cyan-400 font-semibold">{formatPrice(product.GIABAN)}</span>
-                                <span className="text-white/40 text-xs">Kho: {product.TONKHO}</span>
+                                <span className="text-cyan-400 font-semibold">{formatPrice(product.SALE_PRICE)}</span>
+                                <span className="text-white/40 text-xs">Kho: {product.STOCK}</span>
                             </div>
                         </div>
                     </div>
@@ -286,8 +286,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Tên sách *</label>
                                     <input
                                         type="text"
-                                        value={formData.TENSACH}
-                                        onChange={(e) => setFormData({ ...formData, TENSACH: e.target.value })}
+                                        value={formData.TITLE}
+                                        onChange={(e) => setFormData({ ...formData, TITLE: e.target.value })}
                                         required
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                                     />
@@ -297,8 +297,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Tác giả *</label>
                                     <input
                                         type="text"
-                                        value={formData.TACGIA}
-                                        onChange={(e) => setFormData({ ...formData, TACGIA: e.target.value })}
+                                        value={formData.AUTHOR}
+                                        onChange={(e) => setFormData({ ...formData, AUTHOR: e.target.value })}
                                         required
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                                     />
@@ -308,8 +308,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Nhà xuất bản *</label>
                                     <input
                                         type="text"
-                                        value={formData.NXB}
-                                        onChange={(e) => setFormData({ ...formData, NXB: e.target.value })}
+                                        value={formData.PUBLISHER}
+                                        onChange={(e) => setFormData({ ...formData, PUBLISHER: e.target.value })}
                                         required
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                                     />
@@ -319,8 +319,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Giá bìa *</label>
                                     <input
                                         type="number"
-                                        value={formData.GIABIA}
-                                        onChange={(e) => setFormData({ ...formData, GIABIA: e.target.value })}
+                                        value={formData.LIST_PRICE}
+                                        onChange={(e) => setFormData({ ...formData, LIST_PRICE: e.target.value })}
                                         required
                                         min="0"
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
@@ -331,8 +331,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Giá bán *</label>
                                     <input
                                         type="number"
-                                        value={formData.GIABAN}
-                                        onChange={(e) => setFormData({ ...formData, GIABAN: e.target.value })}
+                                        value={formData.SALE_PRICE}
+                                        onChange={(e) => setFormData({ ...formData, SALE_PRICE: e.target.value })}
                                         required
                                         min="0"
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
@@ -343,8 +343,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Số trang *</label>
                                     <input
                                         type="number"
-                                        value={formData.SOTRANG}
-                                        onChange={(e) => setFormData({ ...formData, SOTRANG: e.target.value })}
+                                        value={formData.PAGE_COUNT}
+                                        onChange={(e) => setFormData({ ...formData, PAGE_COUNT: e.target.value })}
                                         required
                                         min="1"
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
@@ -355,8 +355,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">Tồn kho *</label>
                                     <input
                                         type="number"
-                                        value={formData.TONKHO}
-                                        onChange={(e) => setFormData({ ...formData, TONKHO: e.target.value })}
+                                        value={formData.STOCK}
+                                        onChange={(e) => setFormData({ ...formData, STOCK: e.target.value })}
                                         required
                                         min="0"
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
@@ -372,7 +372,7 @@ const ProductManagement = () => {
                                     >
                                         <option value="">Chọn danh mục</option>
                                         {categories.map((cat) => (
-                                            <option key={cat._id} value={cat._id}>{cat.TENDANHMUC || cat.name}</option>
+                                            <option key={cat._id} value={cat._id}>{cat.NAME || cat.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -381,8 +381,8 @@ const ProductManagement = () => {
                                     <label className="block text-sm text-white/60 mb-2">URL hình ảnh</label>
                                     <input
                                         type="url"
-                                        value={formData.IMG_CARD}
-                                        onChange={(e) => setFormData({ ...formData, IMG_CARD: e.target.value })}
+                                        value={formData.IMAGE_CARD}
+                                        onChange={(e) => setFormData({ ...formData, IMAGE_CARD: e.target.value })}
                                         placeholder="https://..."
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                                     />
@@ -391,8 +391,8 @@ const ProductManagement = () => {
                                 <div className="md:col-span-2">
                                     <label className="block text-sm text-white/60 mb-2">Mô tả</label>
                                     <textarea
-                                        value={formData.MOTA}
-                                        onChange={(e) => setFormData({ ...formData, MOTA: e.target.value })}
+                                        value={formData.DESCRIPTION}
+                                        onChange={(e) => setFormData({ ...formData, DESCRIPTION: e.target.value })}
                                         rows="3"
                                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
                                     ></textarea>

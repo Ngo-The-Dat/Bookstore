@@ -10,12 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const FilterSidebar = ({ 
-  authors, 
-  publishers, 
-  filters, 
-  onFilterChange, 
-  onApply 
+const FilterSidebar = ({
+  authors,
+  publishers,
+  filters,
+  onFilterChange,
+  onApply
 }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 space-y-6">
@@ -24,17 +24,17 @@ const FilterSidebar = ({
       <div className="space-y-3">
         <Label className="text-gray-700 font-medium">Khoảng giá (VNĐ)</Label>
         <div className="flex gap-2 items-center">
-          <Input 
-            type="number" 
-            placeholder="Từ" 
+          <Input
+            type="number"
+            placeholder="Từ"
             value={filters.minPrice}
             onChange={(e) => onFilterChange("minPrice", e.target.value)}
             className="h-8 text-sm"
           />
           <span>-</span>
-          <Input 
-            type="number" 
-            placeholder="Đến" 
+          <Input
+            type="number"
+            placeholder="Đến"
             value={filters.maxPrice}
             onChange={(e) => onFilterChange("maxPrice", e.target.value)}
             className="h-8 text-sm"
@@ -44,9 +44,9 @@ const FilterSidebar = ({
 
       <div className="space-y-3">
         <Label className="text-gray-700 font-medium">Tác giả</Label>
-        <Select 
-          value={filters.TACGIA} 
-          onValueChange={(val) => onFilterChange("TACGIA", val === "all" ? "" : val)}
+        <Select
+          value={filters.AUTHOR}
+          onValueChange={(val) => onFilterChange("AUTHOR", val === "all" ? "" : val)}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Chọn tác giả" />
@@ -54,8 +54,8 @@ const FilterSidebar = ({
           <SelectContent>
             <SelectItem value="all">Tất cả</SelectItem>
             {authors.map((item, idx) => (
-              <SelectItem key={idx} value={item.NXB || item._id}> 
-                {item.NXB || item._id} ({item.total_books})
+              <SelectItem key={idx} value={item.AUTHOR || item._id}>
+                {item.AUTHOR || item._id} ({item.total_books})
               </SelectItem>
             ))}
           </SelectContent>
@@ -64,9 +64,9 @@ const FilterSidebar = ({
 
       <div className="space-y-3">
         <Label className="text-gray-700 font-medium">Nhà xuất bản</Label>
-        <Select 
-          value={filters.NXB} 
-          onValueChange={(val) => onFilterChange("NXB", val === "all" ? "" : val)}
+        <Select
+          value={filters.PUBLISHER}
+          onValueChange={(val) => onFilterChange("PUBLISHER", val === "all" ? "" : val)}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Chọn NXB" />
@@ -74,8 +74,8 @@ const FilterSidebar = ({
           <SelectContent>
             <SelectItem value="all">Tất cả</SelectItem>
             {publishers.map((item, idx) => (
-              <SelectItem key={idx} value={item.NXB || item._id}>
-                {item.NXB || item._id} ({item.total_books})
+              <SelectItem key={idx} value={item.PUBLISHER || item._id}>
+                {item.PUBLISHER || item._id} ({item.total_books})
               </SelectItem>
             ))}
           </SelectContent>
@@ -85,10 +85,10 @@ const FilterSidebar = ({
       {/* Sắp xếp */}
       <div className="space-y-3">
         <Label className="text-gray-700 font-medium">Sắp xếp theo giá</Label>
-        <Select 
-          value={filters.order} 
+        <Select
+          value={filters.order}
           onValueChange={(val) => {
-            onFilterChange("sort", "GIABAN");
+            onFilterChange("sort", "SALE_PRICE");
             onFilterChange("order", val);
           }}
         >

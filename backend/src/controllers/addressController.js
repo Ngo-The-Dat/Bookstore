@@ -18,8 +18,8 @@ export const get_all_address = async (req, res) => {
             {
                 $project: {
                     // _id: 0,
-                    name: "$user_info.HOTEN",
-                    DIACHI: 1,
+                    name: "$user_info.FULL_NAME",
+                    ADDRESS_LINE: 1,
                     IS_DEFAULT: 1,
                 }
             }

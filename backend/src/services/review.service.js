@@ -50,7 +50,7 @@ export const get_book_average_rating = async (bookId) => {
         {
             $project: {
                 PRODUCT_ID: "$product_info._id",
-                PRODUCT_NAME: "$product_info.TENSACH",
+                PRODUCT_NAME: "$product_info.TITLE",
                 average: "$average_rating"
             }
         }

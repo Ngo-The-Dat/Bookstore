@@ -8,6 +8,6 @@ export const categoryService = {
   getByName: async (categoryName) => {
     const categories = await axiosClient.get("/categories");
     const list = Array.isArray(categories) ? categories : (categories.categories || []);
-    return list.find(cat => cat.TENDM === categoryName) || null;
+    return list.find(cat => cat.NAME === categoryName) || null;
   },
 };

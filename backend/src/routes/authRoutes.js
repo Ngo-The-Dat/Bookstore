@@ -5,7 +5,7 @@ import passport from '../config/passport.js';
 
 const router = express.Router();
 
-// Request: Body { HOTEN, PHAI, EMAIL, PASSWORD, SDT, NGAYSN }
+// Request: Body { FULL_NAME, GENDER, EMAIL, PASSWORD, PHONE, DATE_OF_BIRTH }
 router.post('/signup', validate(signupRules), signup);
 
 // Request: Body { EMAIL, PASSWORD }

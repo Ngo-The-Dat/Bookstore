@@ -18,13 +18,13 @@ import GoogleLoginButton from "@/components/GoogleLoginButton";
 const RegisterPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        HOTEN: "",
+        FULL_NAME: "",
         EMAIL: "",
         PASSWORD: "",
         confirmPassword: "",
-        SDT: "",
-        NGAYSN: "",
-        PHAI: "Nam",
+        PHONE: "",
+        DATE_OF_BIRTH: "",
+        GENDER: "Nam",
     });
     const [loading, setLoading] = useState(false);
 
@@ -34,15 +34,15 @@ const RegisterPage = () => {
     };
 
     const handleSelectChange = (value) => {
-        setFormData((prev) => ({ ...prev, PHAI: value }));
+        setFormData((prev) => ({ ...prev, GENDER: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { HOTEN, EMAIL, PASSWORD, confirmPassword, SDT, NGAYSN, PHAI } = formData;
+        const { FULL_NAME, EMAIL, PASSWORD, confirmPassword, PHONE, DATE_OF_BIRTH, GENDER } = formData;
 
-        if (!HOTEN || !EMAIL || !PASSWORD || !SDT || !NGAYSN) {
+        if (!FULL_NAME || !EMAIL || !PASSWORD || !PHONE || !DATE_OF_BIRTH) {
             toast.error("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -56,12 +56,12 @@ const RegisterPage = () => {
         try {
             const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
             await axios.post(`${API_BASE}/auth/signup`, {
-                HOTEN,
+                FULL_NAME,
                 EMAIL,
                 PASSWORD,
-                SDT,
-                NGAYSN,
-                PHAI,
+                PHONE,
+                DATE_OF_BIRTH,
+                GENDER,
             });
 
             toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
@@ -114,13 +114,13 @@ const RegisterPage = () => {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Họ tên */}
                         <div>
-                            <label htmlFor="HOTEN" className="block text-sm font-medium text-slate-700 mb-1">
+                            <label htmlFor="FULL_NAME" className="block text-sm font-medium text-slate-700 mb-1">
                                 Họ và tên
                             </label>
                             <Input
-                                id="HOTEN"
+                                id="FULL_NAME"
                                 placeholder="Nguyễn Văn A"
-                                value={formData.HOTEN}
+                                value={formData.FULL_NAME}
                                 onChange={handleChange}
                             />
                         </div>
@@ -142,13 +142,13 @@ const RegisterPage = () => {
                         {/* SĐT & Giới tính */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="SDT" className="block text-sm font-medium text-slate-700 mb-1">
+                                <label htmlFor="PHONE" className="block text-sm font-medium text-slate-700 mb-1">
                                     Số điện thoại
                                 </label>
                                 <Input
-                                    id="SDT"
+                                    id="PHONE"
                                     placeholder="0901234567"
-                                    value={formData.SDT}
+                                    value={formData.PHONE}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -156,7 +156,7 @@ const RegisterPage = () => {
                                 <label className="block text-sm font-medium text-slate-700 mb-1">
                                     Giới tính
                                 </label>
-                                <Select value={formData.PHAI} onValueChange={handleSelectChange}>
+                                <Select value={formData.GENDER} onValueChange={handleSelectChange}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Chọn giới tính" />
                                     </SelectTrigger>
@@ -170,13 +170,13 @@ const RegisterPage = () => {
 
                         {/* Ngày sinh */}
                         <div>
-                            <label htmlFor="NGAYSN" className="block text-sm font-medium text-slate-700 mb-1">
+                            <label htmlFor="DATE_OF_BIRTH" className="block text-sm font-medium text-slate-700 mb-1">
                                 Ngày sinh
                             </label>
                             <Input
-                                id="NGAYSN"
+                                id="DATE_OF_BIRTH"
                                 type="date"
-                                value={formData.NGAYSN}
+                                value={formData.DATE_OF_BIRTH}
                                 onChange={handleChange}
                             />
                         </div>

@@ -33,7 +33,7 @@ export const addProductToCart = async (userId, { productId, quantity }) => {
   if (!product) throw new Error("Không tìm thấy sản phẩm")
 
   // Kiểm tra tồn kho
-  if (product.TONKHO < qty) {
+  if (product.STOCK < qty) {
     throw new Error("Không đủ hàng trong kho")
   }
 
@@ -48,7 +48,7 @@ export const addProductToCart = async (userId, { productId, quantity }) => {
     const itemIndex = cart.CART_DETAIL.findIndex(item => item.PRODUCT.equals(productId))
     if (itemIndex > -1) {
       const newQty = cart.CART_DETAIL[itemIndex].QUANTITY + qty
-      if (newQty > product.TONKHO) {
+      if (newQty > product.STOCK) {
         throw new Error("Số lượng vượt quá tồn kho")
       }
       cart.CART_DETAIL[itemIndex].QUANTITY = newQty
@@ -86,7 +86,7 @@ export const updateCartItemQuantity = async (userId, productId, quantity) => {
     cart.CART_DETAIL.splice(itemIndex, 1)
   } else {
     const product = await Product.findById(productId)
-    if (product && qty > product.TONKHO) {
+    if (product && qty > product.STOCK) {
       throw new Error("Số lượng vượt quá tồn kho")
     }
     cart.CART_DETAIL[itemIndex].QUANTITY = qty

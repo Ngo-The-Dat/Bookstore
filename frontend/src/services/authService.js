@@ -2,16 +2,16 @@ import axiosClient from "@/api/axiosClient";
 
 export const authService = {
   login: (email, password) => {
-    return axiosClient.post("/auth/login", { EMAIL: email, PASSWORD: password});
+    return axiosClient.post("/auth/login", { EMAIL: email, PASSWORD: password });
   },
   register: (data) => {
     return axiosClient.post("/auth/signup", {
-        HOTEN: data.fullName,
-        EMAIL: data.email,
-        PASSWORD: data.password,
-        SDT: data.phone,
-        NGAYSN: data.dateOfBirth,
-        PHAI: data.gender
+      FULL_NAME: data.fullName,
+      EMAIL: data.email,
+      PASSWORD: data.password,
+      PHONE: data.phone,
+      DATE_OF_BIRTH: data.dateOfBirth,
+      GENDER: data.gender
     });
   },
   getCurrentUser: () => {

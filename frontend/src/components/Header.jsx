@@ -91,10 +91,10 @@ const Header = () => {
                   categories.map((category) => (
                     <Link
                       key={category._id}
-                      to={`/category/${category.TENDM}`}
+                      to={`/category/${encodeURIComponent(category.NAME || "")}`}
                       className="px-3 py-2 text-sm rounded-md hover:bg-accent truncate"
                     >
-                      {category.TENDM}
+                      {category.NAME}
                     </Link>
                   ))
                 ) : (
@@ -147,7 +147,7 @@ const Header = () => {
               </PopoverTrigger>
               <PopoverContent className="w-48 p-2" align="end">
                 <div className="px-2 py-1.5 text-sm font-semibold border-b mb-1">
-                  {user.HOTEN || user.EMAIL}
+                  {user.FULL_NAME || user.EMAIL}
                 </div>
                 <Link to="/profile" className="block">
                   <Button

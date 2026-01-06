@@ -25,13 +25,13 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const cartItems = useMemo(() => cart?.CART_DETAIL || [], [cart]);
-  
+
   const cartCount = useMemo(() => {
     return cartItems.reduce((acc, item) => acc + item.QUANTITY, 0);
   }, [cartItems]);
 
   const cartTotal = useMemo(() => {
-    return cartItems.reduce((acc, item) => acc + (item.PRODUCT?.GIABAN || 0) * item.QUANTITY, 0);
+    return cartItems.reduce((acc, item) => acc + (item.PRODUCT?.SALE_PRICE || 0) * item.QUANTITY, 0);
   }, [cartItems]);
 
   // Actions
@@ -39,7 +39,7 @@ export const CartProvider = ({ children }) => {
     try {
       await cartService.addToCart(productId, quantity);
       toast.success("Đã thêm vào giỏ hàng");
-      await fetchCart(); 
+      await fetchCart();
     } catch (error) {
       toast.error("Lỗi khi thêm vào giỏ hàng");
     }

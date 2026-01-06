@@ -22,7 +22,7 @@ export const createNewOrder = async (userId, { shippingAddress, couponCode, paym
 
   // Tính tổng tiền hàng
   const subTotal = cart.CART_DETAIL.reduce(
-    (sum, item) => sum + item.PRODUCT.GIABAN * item.QUANTITY,
+    (sum, item) => sum + item.PRODUCT.SALE_PRICE * item.QUANTITY,
     0
   )
 
@@ -55,9 +55,9 @@ export const createNewOrder = async (userId, { shippingAddress, couponCode, paym
   // Tạo mảng ITEM từ giỏ hàng
   const items = cart.CART_DETAIL.map(item => ({
     PRODUCT: item.PRODUCT._id,
-    PRICE_AT_PURCHASE: item.PRODUCT.GIABAN,
+    PRICE_AT_PURCHASE: item.PRODUCT.SALE_PRICE,
     QUANTITY: item.QUANTITY,
-    TOTAL: item.PRODUCT.GIABAN * item.QUANTITY
+    TOTAL: item.PRODUCT.SALE_PRICE * item.QUANTITY
   }))
 
   // Tạo đơn hàng mới
@@ -190,7 +190,7 @@ export const getAllOrders = async () => {
   const orders = await Order.find()
     .sort({ createdAt: -1 })
     .populate("ITEM.PRODUCT")
-    .populate("USER", "HOTEN EMAIL SDT")
+    .populate("USER", "FULL_NAME EMAIL PHONE")
     .populate("COUPON")
 
   return orders

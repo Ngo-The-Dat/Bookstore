@@ -146,15 +146,15 @@ const OrderDetailPage = () => {
                                 {order.ITEM.map((item, index) => (
                                     <div key={index} className="p-4 flex gap-4">
                                         <div className="w-20 h-28 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 border">
-                                            {item.PRODUCT?.IMG_CARD ? (
-                                                <img src={item.PRODUCT.IMG_CARD} alt={item.PRODUCT.TENSACH} className="w-full h-full object-cover" />
+                                            {item.PRODUCT?.IMAGE_CARD ? (
+                                                <img src={item.PRODUCT.IMAGE_CARD} alt={item.PRODUCT.TITLE} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No Img</div>
                                             )}
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-medium text-gray-900 mb-1">{item.PRODUCT?.TENSACH || "Sản phẩm không tồn tại"}</h3>
-                                            <p className="text-sm text-gray-500 mb-2">Tác giả: {item.PRODUCT?.TACGIA || "N/A"}</p>
+                                            <h3 className="font-medium text-gray-900 mb-1">{item.PRODUCT?.TITLE || "Sản phẩm không tồn tại"}</h3>
+                                            <p className="text-sm text-gray-500 mb-2">Tác giả: {item.PRODUCT?.AUTHOR || "N/A"}</p>
                                             <div className="flex justify-between items-center mt-4">
                                                 <p className="text-sm">Số lượng: <span className="font-semibold">{item.QUANTITY}</span></p>
                                                 <p className="text-blue-600 font-semibold">
@@ -179,11 +179,11 @@ const OrderDetailPage = () => {
                             <div className="space-y-3 text-sm">
                                 <div>
                                     <p className="text-gray-500 text-xs">Người nhận</p>
-                                    <p className="font-medium text-gray-900">{order.USER?.HOTEN}</p>
+                                    <p className="font-medium text-gray-900">{order.USER?.FULL_NAME}</p>
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-xs">Số điện thoại</p>
-                                    <p className="font-medium text-gray-900">{order.USER?.SDT}</p>
+                                    <p className="font-medium text-gray-900">{order.USER?.PHONE}</p>
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-xs">Địa chỉ</p>

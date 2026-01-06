@@ -115,11 +115,11 @@ const CheckoutPage = () => {
                                             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">IMG</div>
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.PRODUCT.TENSACH}</h3>
+                                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.PRODUCT.TITLE}</h3>
                                             <p className="text-sm text-gray-500">x {item.QUANTITY}</p>
                                         </div>
                                         <div className="text-sm font-medium text-gray-900">
-                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.PRODUCT.GIABAN * item.QUANTITY)}
+                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.PRODUCT.SALE_PRICE * item.QUANTITY)}
                                         </div>
                                     </div>
                                 ))}

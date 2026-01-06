@@ -21,7 +21,7 @@ NHIỆM VỤ:
 export const converse = async (req, res) => {
     try {
         const message = req.body.message;
-        
+
         const relevant_books = await product.aggregate([
             {
                 $lookup: {
@@ -31,16 +31,16 @@ export const converse = async (req, res) => {
                     as: "category_info"
                 }
             },
-            {$unwind: "$category_info"},
+            { $unwind: "$category_info" },
             {
                 $project: {
                     _id: 0,
-                    TENSACH: 1,
-                    GIABAN: 1,
-                    TACGIA: 1,
-                    TONKHO: 1,
-                    MOTA: 1,
-                    CATEGORY: "$category_info.TENDM"
+                    TITLE: 1,
+                    SALE_PRICE: 1,
+                    AUTHOR: 1,
+                    STOCK: 1,
+                    DESCRIPTION: 1,
+                    CATEGORY: "$category_info.NAME"
                 }
             }
         ])
@@ -49,18 +49,18 @@ export const converse = async (req, res) => {
         if (relevant_books.length > 0) {
             book_context = "Dưới đây là thông tin sách hiện có trong kho phù hợp với câu hỏi:\n"
             relevant_books.forEach(book => {
-                book_context += `-Tên: ${book.TENSACH}, Giá bán: ${book.GIABAN} VNĐ, Tác giả: ${book.TACGIA}, Tồn kho: ${book.TONKHO}, Mô tả: ${book.MOTA}, Thể loại: ${book.CATEGORY}\n`
+                book_context += `-Tên: ${book.TITLE}, Giá bán: ${book.SALE_PRICE} VNĐ, Tác giả: ${book.AUTHOR}, Tồn kho: ${book.STOCK}, Mô tả: ${book.DESCRIPTION}, Thể loại: ${book.CATEGORY}\n`
             })
         } else {
             book_context = "Hiện tại hệ thống không tìm thấy sách nào khớp trong kho dữ liệu."
         }
-        
+
         const final_prompt = `
         THÔNG TIN DỮ LIỆU TỪ DATABASE (Sử dụng thông tin này để trả lời, không được bịa đặt):
         ${book_context}
         
         Câu hỏi của khách hàng: "${message}"
-        `; 
+        `;
         const respond = await ai.models.generateContent({
             model: "gemini-2.5-flash-lite",
             config: {
@@ -70,9 +70,9 @@ export const converse = async (req, res) => {
                 { role: "user", text: final_prompt }
             ]
         })
-        
+
         res.status(201).json({ answer: respond.text })
-        
+
     } catch (error) {
         res.status(500).json({ message: "Lỗi ở converse", error })
     }

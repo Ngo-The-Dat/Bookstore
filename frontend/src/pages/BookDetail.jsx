@@ -323,37 +323,37 @@ const BookDetail = () => {
 
           {/* RIGHT — Thông tin sách */}
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-gray-900">{book.TENSACH}</h1>
+            <h1 className="text-4xl font-bold text-gray-900">{book.TITLE}</h1>
             <p className="text-gray-700 text-lg">
-              Tác giả: <b>{book.TACGIA}</b>
+              Tác giả: <b>{book.AUTHOR}</b>
             </p>
             <div className="text-xl">
               <span className="text-red-600 font-bold text-3xl">
-                {book.GIABAN.toLocaleString()} đ
+                {book.SALE_PRICE.toLocaleString()} đ
               </span>
               <span className="text-gray-400 line-through ml-3 text-lg">
-                {book.GIABIA.toLocaleString()} đ
+                {book.LIST_PRICE.toLocaleString()} đ
               </span>
             </div>
             <div className="border-t pt-4 text-gray-700">
               <h2 className="font-bold text-lg mb-2">Mô tả sản phẩm</h2>
-              <p>{book.MOTA}</p>
+              <p>{book.DESCRIPTION}</p>
             </div>
             <div className="border-t pt-4 text-gray-700">
               <h2 className="font-bold text-lg mb-2">Thông tin chi tiết</h2>
               <ul className="space-y-1">
-                <li><b>Nhà xuất bản:</b> {book.NXB}</li>
-                <li><b>Số trang:</b> {book.SOTRANG}</li>
-                <li><b>Tồn kho:</b> {book.TONKHO}</li>
+                <li><b>Nhà xuất bản:</b> {book.PUBLISHER}</li>
+                <li><b>Số trang:</b> {book.PAGE_COUNT}</li>
+                <li><b>Tồn kho:</b> {book.STOCK}</li>
                 {category && (
                   <li className="flex items-center gap-2">
                     <b>Danh mục:</b>
-                    <Link to={`/category/${encodeURIComponent(category.TENDM)}`}>
+                    <Link to={`/category/${encodeURIComponent(category.NAME)}`}>
                       <Badge
                         variant="secondary"
                         className="cursor-pointer hover:bg-primary hover:text-white transition-colors"
                       >
-                        {category.TENDM}
+                        {category.NAME}
                       </Badge>
                     </Link>
                   </li>

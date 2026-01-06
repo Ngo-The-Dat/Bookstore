@@ -8,7 +8,7 @@ export const signToken = (user) => {
     return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
-export const signupUser = async ({ HOTEN, PHAI, EMAIL, PASSWORD, SDT, NGAYSN }) => {
+export const signupUser = async ({ FULL_NAME, GENDER, EMAIL, PASSWORD, PHONE, DATE_OF_BIRTH }) => {
     // 1. Khởi tạo session
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -23,16 +23,16 @@ export const signupUser = async ({ HOTEN, PHAI, EMAIL, PASSWORD, SDT, NGAYSN }) 
                 throw new Error("EMAIL_ALREADY_IN_USE");
             } else {
                 // Nếu đã có social, thêm thông tin cho user
-                user.HOTEN = HOTEN;
-                user.PHAI = PHAI;
-                user.SDT = SDT;
-                user.NGAYSN = NGAYSN;
+                user.FULL_NAME = FULL_NAME;
+                user.GENDER = GENDER;
+                user.PHONE = PHONE;
+                user.DATE_OF_BIRTH = DATE_OF_BIRTH;
                 await user.save({ session });
             }
         } else {
             // 3. Tạo User MỚI
             user = new User({
-                HOTEN, PHAI, EMAIL, SDT, NGAYSN
+                FULL_NAME, GENDER, EMAIL, PHONE, DATE_OF_BIRTH
             });
             await user.save({ session });
         }

@@ -15,13 +15,13 @@ const BookCard = ({ book }) => {
     let isMounted = true;
 
     const fetchImageUrl = async () => {
-      if (!book || book.IMG_CARD.length === 0) {
+      if (!book || book.IMAGE_CARD?.length === 0) {
         // không có ảnh: dùng placeholder
         if (isMounted) setImageUrl('https://via.placeholder.com/400x600.png?text=No+Image');
         return;
       }
 
-      const coverImageName = book.IMG_CARD;
+      const coverImageName = book.IMAGE_CARD;
       try {
         const API_BASE_URL = import.meta.env.VITE_API_URL || "";
         const endpoint = `${API_BASE_URL}/images/urls`;
@@ -84,7 +84,7 @@ const BookCard = ({ book }) => {
             {imageUrl ? (
               <img
                 src={imageUrl}
-                alt={book.TENSACH}
+                alt={book.TITLE}
                 className="h-full w-auto object-cover object-center block"
                 draggable="false"
               />
@@ -100,15 +100,15 @@ const BookCard = ({ book }) => {
           <div className="p-3 flex flex-col justify-between flex-grow h-36">
             <CardContent className="p-0">
               <CardTitle className="text-sm font-semibold leading-tight h-10 line-clamp-2">
-                {book.TENSACH}
+                {book.TITLE}
               </CardTitle>
             </CardContent>
             <CardFooter className="flex flex-col items-start p-0 mt-2">
               <p className="text-base font-bold text-destructive">
-                {formatCurrency(book.GIABAN)}
+                {formatCurrency(book.SALE_PRICE)}
               </p>
               <p className="text-xs text-gray-400 line-through mt-0.5">
-                {formatCurrency(book.GIABIA)}
+                {formatCurrency(book.LIST_PRICE)}
               </p>
             </CardFooter>
           </div>

@@ -177,7 +177,7 @@ const ProfilePage = () => {
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900">
-                                    {user?.HOTEN || "Người dùng"}
+                                    {user?.FULL_NAME || "Người dùng"}
                                 </h1>
                                 <p className="text-gray-600">{user?.EMAIL}</p>
                                 <Badge variant="secondary" className="mt-2">
@@ -219,7 +219,7 @@ const ProfilePage = () => {
                                             <User className="w-5 h-5 text-primary" />
                                             <div>
                                                 <p className="text-sm text-gray-500">Họ và tên</p>
-                                                <p className="font-medium">{user?.HOTEN}</p>
+                                                <p className="font-medium">{user?.FULL_NAME}</p>
                                             </div>
                                         </div>
 
@@ -235,7 +235,7 @@ const ProfilePage = () => {
                                             <Phone className="w-5 h-5 text-primary" />
                                             <div>
                                                 <p className="text-sm text-gray-500">Số điện thoại</p>
-                                                <p className="font-medium">{user?.SDT || "Chưa cập nhật"}</p>
+                                                <p className="font-medium">{user?.PHONE || "Chưa cập nhật"}</p>
                                             </div>
                                         </div>
 
@@ -244,7 +244,7 @@ const ProfilePage = () => {
                                             <div>
                                                 <p className="text-sm text-gray-500">Ngày sinh</p>
                                                 <p className="font-medium">
-                                                    {user?.NGAYSN ? formatDate(user.NGAYSN) : "Chưa cập nhật"}
+                                                    {user?.DATE_OF_BIRTH ? formatDate(user.DATE_OF_BIRTH) : "Chưa cập nhật"}
                                                 </p>
                                             </div>
                                         </div>
@@ -253,7 +253,7 @@ const ProfilePage = () => {
                                             <User className="w-5 h-5 text-primary" />
                                             <div>
                                                 <p className="text-sm text-gray-500">Giới tính</p>
-                                                <p className="font-medium">{user?.PHAI || "Chưa cập nhật"}</p>
+                                                <p className="font-medium">{user?.GENDER || "Chưa cập nhật"}</p>
                                             </div>
                                         </div>
 
@@ -329,7 +329,7 @@ const ProfilePage = () => {
                                                         {order.ITEM?.slice(0, 2).map((item, idx) => (
                                                             <div key={idx} className="flex items-center gap-2 text-sm">
                                                                 <span className="text-gray-600">
-                                                                    {item.PRODUCT?.TENSACH || "Sản phẩm"} x {item.QUANTITY}
+                                                                    {item.PRODUCT?.TITLE || "Sản phẩm"} x {item.QUANTITY}
                                                                 </span>
                                                                 <span className="text-gray-400">-</span>
                                                                 <span>{formatCurrency(item.TOTAL || item.PRICE_AT_PURCHASE * item.QUANTITY)}</span>
@@ -410,16 +410,16 @@ const ProfilePage = () => {
                                                             className="flex items-center gap-3 cursor-pointer hover:text-primary"
                                                             onClick={() => review.productInfo && navigate(`/book/${review.PRODUCT}`)}
                                                         >
-                                                            {review.productInfo?.IMG_CARD && (
+                                                            {review.productInfo?.IMAGE_CARD && (
                                                                 <img
-                                                                    src={review.productInfo.IMG_CARD}
-                                                                    alt={review.productInfo.TENSACH}
+                                                                    src={review.productInfo.IMAGE_CARD}
+                                                                    alt={review.productInfo.TITLE}
                                                                     className="w-12 h-16 object-cover rounded"
                                                                 />
                                                             )}
                                                             <div>
                                                                 <p className="font-medium">
-                                                                    {review.productInfo?.TENSACH || "Sản phẩm"}
+                                                                    {review.productInfo?.TITLE || "Sản phẩm"}
                                                                 </p>
                                                                 <div className="flex items-center gap-1">
                                                                     {[...Array(5)].map((_, i) => (

@@ -14,7 +14,7 @@ router.delete('/delete_user/:id', protect, restrictTo('admin'), delete_user);
 
 // Request: Body { fields to update }
 // Phải đăng nhập mới được phép cập nhật thông tin cá nhân
-// Field bao gồm { HOTEN, PHAI, EMAIL, SDT, NGAYSN }
+// Field bao gồm { FULL_NAME, GENDER, EMAIL, PHONE, DATE_OF_BIRTH }
 router.put('/update_current_user', protect, update_current_user);
 
 // Request: Param { id }

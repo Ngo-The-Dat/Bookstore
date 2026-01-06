@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose
 
 const category_schema = new Schema({
-    TENDM: {
+    NAME: {
         type: String,
         required: true
     },

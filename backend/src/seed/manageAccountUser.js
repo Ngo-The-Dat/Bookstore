@@ -7,33 +7,33 @@ const manageAccountUser = async () => {
         await connectDB();
 
         const result = await User.aggregate([
-        {
-            $lookup: {
-                from: 'user_authentications',
-                localField: '_id',
-                foreignField: 'USER',
-                as: 'auths'
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                HOTEN: 1,
-                EMAIL: 1,
-                ROLE: 1,
-                IS_ACTIVE: 1,
+            {
+                $lookup: {
+                    from: 'user_authentications',
+                    localField: '_id',
+                    foreignField: 'USER',
+                    as: 'auths'
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    FULL_NAME: 1,
+                    EMAIL: 1,
+                    ROLE: 1,
+                    IS_ACTIVE: 1,
 
-                authCount: { $size: '$auths' },
+                    authCount: { $size: '$auths' },
 
-                providers: {
-                    $map: {
-                        input: '$auths',
-                        as: 'a',
-                        in: '$$a.PROVIDER_NAME'
+                    providers: {
+                        $map: {
+                            input: '$auths',
+                            as: 'a',
+                            in: '$$a.PROVIDER_NAME'
+                        }
                     }
                 }
             }
-        }
         ]);
 
         console.table(result);
@@ -42,7 +42,7 @@ const manageAccountUser = async () => {
         console.error('Error managing account users:', error);
     } finally {
         await closeDBConnection();
-    }   
+    }
 };
 
 manageAccountUser();

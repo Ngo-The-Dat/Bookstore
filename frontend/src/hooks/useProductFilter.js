@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"; 
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { productService } from "@/services/productService";
 
@@ -10,14 +10,14 @@ export const useProductFilter = () => {
 
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [filters, setFilters] = useState({
     minPrice: "",
     maxPrice: "",
-    TACGIA: "",
-    NXB: "",
+    AUTHOR: "",
+    PUBLISHER: "",
     sort: "",
     order: "asc"
   });
@@ -45,7 +45,7 @@ export const useProductFilter = () => {
       try {
         let data = [];
         if (query) {
-          setFilters(prev => ({ ...prev, minPrice: "", maxPrice: "", TACGIA: "", NXB: "" }));
+          setFilters(prev => ({ ...prev, minPrice: "", maxPrice: "", AUTHOR: "", PUBLISHER: "" }));
           data = await productService.searchByName(query);
         } else {
           const cleanFilters = Object.fromEntries(
@@ -93,7 +93,7 @@ export const useProductFilter = () => {
   const totalPages = Math.ceil(allProducts.length / ITEMS_PER_PAGE);
 
   return {
-    products: paginatedProducts, 
+    products: paginatedProducts,
     totalCount: allProducts.length,
     authors,
     publishers,

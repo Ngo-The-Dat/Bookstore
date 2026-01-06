@@ -118,19 +118,19 @@ const CartPage = () => {
                                     <div className="w-24 h-32 bg-gray-200 rounded-md flex-shrink-0 overflow-hidden border">
                                         {/* Sử dụng Component CartItemImage thay vì thẻ img thường */}
                                         <CartItemImage
-                                            imageName={item.PRODUCT?.IMG_CARD}
-                                            altText={item.PRODUCT?.TENSACH}
+                                            imageName={item.PRODUCT?.IMAGE_CARD}
+                                            altText={item.PRODUCT?.TITLE}
                                         />
                                     </div>
 
                                     <div className="flex-1 flex flex-col justify-between">
                                         <div>
                                             <h3 className="font-semibold text-lg text-gray-900 line-clamp-2">
-                                                {item.PRODUCT?.TENSACH}
+                                                {item.PRODUCT?.TITLE}
                                             </h3>
-                                            <p className="text-gray-500 text-sm mt-1">{item.PRODUCT?.TACGIA}</p>
+                                            <p className="text-gray-500 text-sm mt-1">{item.PRODUCT?.AUTHOR}</p>
                                             <p className="text-blue-600 font-bold mt-1">
-                                                {item.PRODUCT?.GIABAN?.toLocaleString()} đ
+                                                {item.PRODUCT?.SALE_PRICE?.toLocaleString()} đ
                                             </p>
                                         </div>
 
