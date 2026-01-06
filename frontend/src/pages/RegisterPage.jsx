@@ -13,6 +13,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -212,6 +213,16 @@ const RegisterPage = () => {
                             {loading ? "Đang đăng ký..." : "Đăng ký"}
                         </Button>
                     </form>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-4 my-6">
+                        <div className="flex-1 h-px bg-slate-300"></div>
+                        <span className="text-sm text-slate-500">hoặc</span>
+                        <div className="flex-1 h-px bg-slate-300"></div>
+                    </div>
+
+                    {/* Google Login Button */}
+                    <GoogleLoginButton label="Đăng ký với Google" />
 
                     <p className="mt-6 text-center text-sm text-slate-600">
                         Đã có tài khoản?{" "}
