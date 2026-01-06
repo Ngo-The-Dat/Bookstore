@@ -14,7 +14,7 @@ export const add_review = async (req, res) => {
         const newReview = await review_service.add_review(req.body);
         res.status(201).json(newReview);
     } catch (error) {
-        res.status(500).json({ message: "Đã có lỗi xảy ra ở add_review", error: error.message });
+        res.status(500).json({ message: "Xảy ra lỗi viết đánh giá", error: error.message });
     }
 };
 
