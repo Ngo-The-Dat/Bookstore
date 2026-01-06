@@ -19,6 +19,7 @@ passport.use(new LocalStrategy(
             if (!user) return done(null, false, { message: 'Email không tồn tại' });
 
             const auth = await UserAuth.findOne({ USER: user._id, PROVIDER_NAME: 'LOCAL' });
+            if (!auth) return done(null, false, { message: 'Tài khoản này không sử dụng đăng nhập bằng mật khẩu' });
 
             const isMatch = await auth.comparePassword(password);
             if (!isMatch) return done(null, false, { message: 'Sai mật khẩu' });
