@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, logout, authResponse } from '../controllers/authController.js';
+import { signup, logout, authResponse, authRedirect } from '../controllers/authController.js';
 import { validate, signupRules } from '../middlewares/validate.js';
 import passport from '../config/passport.js';
 
@@ -16,16 +16,29 @@ router.post('/logout', logout);
 
 // 1. LOGIN LOCAL
 // session: false vì ta dùng JWT, không dùng cookie session
-router.post('/login', passport.authenticate('local', { session: false }), authResponse);
+// Using custom callback to return proper error messages
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            return res.status(500).json({ message: 'Đã có lỗi xảy ra', error: err.message });
+        }
+        if (!user) {
+            return res.status(401).json({ message: info?.message || 'Đăng nhập thất bại' });
+        }
+        req.user = user;
+        next();
+    })(req, res, next);
+}, authResponse);
 
 // 2. LOGIN GOOGLE
 // Bước 2a: Client bấm vào link này -> Chuyển hướng sang Google
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // Bước 2b: Google gọi lại link này (Callback)
-router.get('/google/callback', 
+// Sau khi set cookie, redirect về frontend
+router.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login-fail' }),
-    authResponse // Nếu thành công -> trả về JSON Token
+    authRedirect // Redirect về frontend sau khi set cookie
 );
 
 export default router;

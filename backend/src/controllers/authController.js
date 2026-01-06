@@ -22,9 +22,9 @@ export const signup = async (req, res) => {
         }
 
         // Các lỗi hệ thống khác
-        return res.status(500).json({ 
-            message: "Đã có lỗi xảy ra", 
-            error: error.message 
+        return res.status(500).json({
+            message: "Đã có lỗi xảy ra",
+            error: error.message
         });
     }
 };
@@ -34,7 +34,7 @@ export const logout = (req, res) => {
         httpOnly: true,
         expires: new Date(0) // Thu hồi cookie
     });
-    
+
     res.status(200).json({ message: "Đăng xuất thành công." });
 };
 
@@ -54,4 +54,24 @@ export const authResponse = (req, res) => {
     res.cookie('token', token, cookieOptions);
 
     return res.status(200).json({ message: "Đăng nhập thành công" });
+};
+
+// Controller xử lý redirect sau OAuth (Google/Facebook)
+export const authRedirect = (req, res) => {
+    if (!req.user) {
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        return res.redirect(`${frontendUrl}/login?error=auth_failed`);
+    }
+    const token = signToken(req.user);
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 1 ngày
+    };
+    res.cookie('token', token, cookieOptions);
+
+    // Redirect về frontend callback page
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(`${frontendUrl}/auth/google/callback`);
 };

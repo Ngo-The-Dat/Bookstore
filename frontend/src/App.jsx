@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import GoogleCallbackPage from "./pages/GoogleCallbackPage";
 import ChatBubble from "./components/ChatBubble";
 import BookDetail from "./pages/BookDetail";
 import CartPage from "./pages/CartPage";
@@ -12,6 +13,10 @@ import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import CategoryPage from "./pages/CategoryPage";
 import { CartProvider } from "./context/CartContext";
+
+// Admin Pages
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 
 function App() {
@@ -26,11 +31,17 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/book/:id" element={<BookDetail />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatBubble />
@@ -41,3 +52,4 @@ function App() {
 }
 
 export default App;
+

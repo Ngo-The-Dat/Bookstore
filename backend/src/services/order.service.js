@@ -148,8 +148,8 @@ export const updateOrderStatusService = async (orderId, { status, paymentStatus 
       throw new Error("status không hợp lệ")
     }
     if (status !== "PENDING"
-        && status !== "CANCELLED"
-        && order.PAYMENT_STATUS !== "PAID") {
+      && status !== "CANCELLED"
+      && order.PAYMENT_STATUS !== "PAID") {
       throw new Error("Không thể cập nhật trạng thái khi đơn chưa thanh toán")
     }
     // Không cho hủy nếu đã vận chuyển / hoàn tất
@@ -181,4 +181,17 @@ export const cancelOrderService = async (orderId) => {
   order.STATUS = "CANCELLED"
   await order.save()
   return order
+}
+
+/**
+ * Lấy tất cả đơn hàng (admin only)
+ */
+export const getAllOrders = async () => {
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    .populate("ITEM.PRODUCT")
+    .populate("USER", "HOTEN EMAIL SDT")
+    .populate("COUPON")
+
+  return orders
 }
