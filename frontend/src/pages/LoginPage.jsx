@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
-import { useLogin } from "@/hooks/useLogin"; 
+import { useLogin } from "@/hooks/useLogin";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 const LoginPage = () => {
   const { formData, loading, handleChange, handleLogin } = useLogin();
@@ -49,7 +50,7 @@ const LoginPage = () => {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                value={formData.email} 
+                value={formData.email}
                 onChange={handleChange}
                 autoComplete="email"
               />
@@ -66,8 +67,8 @@ const LoginPage = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                value={formData.password} // Dùng state từ hook
-                onChange={handleChange}   // Dùng hàm từ hook
+                value={formData.password}
+                onChange={handleChange}
                 autoComplete="current-password"
               />
             </div>
@@ -90,6 +91,16 @@ const LoginPage = () => {
               {loading ? "Đang đăng nhập..." : "Đăng nhập"}
             </Button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="flex-1 h-px bg-slate-300"></div>
+            <span className="text-sm text-slate-500">hoặc</span>
+            <div className="flex-1 h-px bg-slate-300"></div>
+          </div>
+
+          {/* Google Login Button */}
+          <GoogleLoginButton label="Đăng nhập với Google" />
 
           <p className="mt-6 text-center text-sm text-slate-600">
             Chưa có tài khoản?{" "}
