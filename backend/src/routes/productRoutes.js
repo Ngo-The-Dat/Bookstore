@@ -1,4 +1,4 @@
-import { get_all_products, add_product, delete_product, update_product, get_all_NXB, get_all_TACGIA, get_product_by_id, get_filter_products, get_bestsellers, get_most_view_books, search_products } from '../controllers/productController.js';
+import { get_all_products, add_product, delete_product, update_product, get_all_publishers, get_all_authors, get_product_by_id, get_filter_products, get_bestsellers, get_most_view_books, search_products } from '../controllers/productController.js';
 import express from 'express';
 import { protect, restrictTo } from '../middlewares/auth.js';
 
@@ -15,10 +15,10 @@ router.get('/detail', get_product_by_id)
 router.delete('/delete_product', delete_product);
 //http://localhost:8000/products/update_product?id=6933df25278af60d988e8cbc
 router.put('/update_product', update_product);
-//http://localhost:8000/products/NXB 
-router.get('/NXB', get_all_NXB);
-//http://localhost:8000/products/TACGIA 
-router.get('/TACGIA', get_all_TACGIA)
+//http://localhost:8000/products/PUBLISHER 
+router.get('/PUBLISHER', get_all_publishers);
+//http://localhost:8000/products/AUTHOR 
+router.get('/AUTHOR', get_all_authors)
 //http://localhost:8000/products/best_seller 
 router.get("/best_seller", get_bestsellers)
 //http://localhost:8000/products/most_view_books 

@@ -104,8 +104,8 @@ export const search_products = async (rawName) => {
     return products;
 };
 
-export const get_all_NXB = async () => {
-    const nxb = await product.aggregate([
+export const get_all_publishers = async () => {
+    const publishers = await product.aggregate([
         {
             $group: {
                 _id: "$PUBLISHER",
@@ -121,11 +121,11 @@ export const get_all_NXB = async () => {
         }
     ]);
 
-    return nxb;
+    return publishers;
 };
 
-export const get_all_TACGIA = async () => {
-    const nxb = await product.aggregate([
+export const get_all_authors = async () => {
+    const authors = await product.aggregate([
         {
             $group: {
                 _id: "$AUTHOR",
@@ -141,5 +141,5 @@ export const get_all_TACGIA = async () => {
         }
     ]);
 
-    return nxb;
+    return authors;
 };

@@ -91,20 +91,20 @@ export const search_products = async (req, res) => {
     }
 };
 
-export const get_all_NXB = async (req, res) => {
+export const get_all_publishers = async (req, res) => {
     try {
-        const nxb = await product_service.get_all_NXB();
-        res.status(200).json(nxb);
+        const publishers = await product_service.get_all_publishers();
+        res.status(200).json(publishers);
     } catch (error) {
-        res.status(500).json({ message: "Lỗi ở get_all_NXB", error: error.message });
+        res.status(500).json({ message: "Lỗi ở get_all_publishers", error: error.message });
     }
 };
 
-export const get_all_TACGIA = async (req, res) => {
+export const get_all_authors = async (req, res) => {
     try {
-        const nxb = await product_service.get_all_TACGIA();
-        res.status(200).json(nxb);
+        const authors = await product_service.get_all_authors();
+        res.status(200).json(authors);
     } catch (error) {
-        res.status(500).json({ message: "Lỗi ở get_all_TACGIA", error: error.message });
+        res.status(500).json({ message: "Lỗi ở get_all_authors", error: error.message });
     }
 };
