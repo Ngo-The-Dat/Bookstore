@@ -13,6 +13,10 @@ import ProfilePage from "./pages/ProfilePage";
 import CategoryPage from "./pages/CategoryPage";
 import { CartProvider } from "./context/CartContext";
 
+// Admin Pages
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
 
 function App() {
   console.log("Current API URL:", import.meta.env.VITE_API_URL);
@@ -31,6 +35,11 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/book/:id" element={<BookDetail />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ChatBubble />
@@ -41,3 +50,4 @@ function App() {
 }
 
 export default App;
+
