@@ -42,10 +42,6 @@ export const createNewOrder = async (userId, { shippingAddress, couponCode, paym
       coupon.DISCOUNT_TYPE === "PERCENTAGE"
         ? Math.round((subTotal * coupon.DISCOUNT_VALUE) / 100)
         : coupon.DISCOUNT_VALUE
-
-    // Cập nhật số lần sử dụng mã
-    coupon.USAGE_COUNT += 1
-    await coupon.save()
   }
 
   // Phí giao hàng (giả sử tạm 30k)
