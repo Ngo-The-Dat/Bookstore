@@ -111,7 +111,6 @@ export const search_products = async (rawName) => {
 
     const products = await product
         .find({ TENSACH: { $regex: normalized, $options: "i" } })
-        .limit(10);
 
     return products;
 };
