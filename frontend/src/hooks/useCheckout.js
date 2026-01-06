@@ -15,6 +15,7 @@ export const useCheckout = () => {
     address: "",
     city: "",
     paymentMethod: "CASH",
+    couponCode: ""
   });
 
   useEffect(() => {
@@ -24,8 +25,8 @@ export const useCheckout = () => {
         if (user) {
           setFormData(prev => ({
             ...prev,
-            fullName: user.FULL_NAME || "",
-            phone: user.PHONE || ""
+            fullName: user.HOTEN || "",
+            phone: user.SDT || ""
           }));
         }
       } catch (error) {
@@ -61,6 +62,7 @@ export const useCheckout = () => {
       const orderData = {
         shippingAddress: `${formData.address}, ${formData.city}`,
         paymentMethod: formData.paymentMethod,
+        couponCode: formData.couponCode
       };
 
       await orderService.createOrder(orderData);
