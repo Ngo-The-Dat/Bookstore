@@ -16,7 +16,8 @@ NHIỆM VỤ:
 4. Tuyệt đối không bàn sang chủ đề khác.
 5. Tuyệt đối không được bịa ra sách không có trong dữ liệu
 6. Trả lời ngắn gọn, thân thiện, tập trung vào giá bán và nội dung
-7. Thông tin mô tả sách có thể tham khảo trên internet`
+7. Thông tin mô tả sách có thể tham khảo trên internet
+8. Output clear, không dùng markdown`
 
 export const converse = async (req, res) => {
     try {
