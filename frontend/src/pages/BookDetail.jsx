@@ -56,6 +56,8 @@ const BookDetail = () => {
 
         if (Array.isArray(data.IMG_DETAIL)) {
           fetchImages(data.IMG_DETAIL);
+        } else {
+          setLoading(false);
         }
         fetchReviews();
         fetchAverageRating();
