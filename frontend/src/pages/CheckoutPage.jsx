@@ -115,11 +115,11 @@ const CheckoutPage = () => {
                                             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">IMG</div>
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.PRODUCT.TITLE}</h3>
+                                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.PRODUCT.TENSACH}</h3>
                                             <p className="text-sm text-gray-500">x {item.QUANTITY}</p>
                                         </div>
                                         <div className="text-sm font-medium text-gray-900">
-                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.PRODUCT.SALE_PRICE * item.QUANTITY)}
+                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.PRODUCT.GIABAN * item.QUANTITY)}
                                         </div>
                                     </div>
                                 ))}
@@ -131,9 +131,24 @@ const CheckoutPage = () => {
                                     <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cartTotal)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
-                                    <span>Phí vận chuyển</span>
                                     <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(shippingFee)}</span>
                                 </div>
+
+                                {/* Coupon Input */}
+                                <div className="pt-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Mã giảm giá (nếu có)</label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            name="couponCode"
+                                            value={formData.couponCode || ""}
+                                            onChange={handleInputChange}
+                                            placeholder="Nhập mã giảm giá"
+                                            className="flex-1"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">Giảm giá sẽ được áp dụng khi đặt hàng.</p>
+                                </div>
+
                                 <div className="flex justify-between text-lg font-bold text-blue-600 pt-2 border-t">
                                     <span>Tổng cộng</span>
                                     <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal)}</span>
